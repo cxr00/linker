@@ -1,2 +1,2 @@
-from sprites.linker.assets import create_scroll, create_vines, create_bang
-from sprites.linker.assets import LINKER
+from sprites.linker.components.assets import create_scroll, create_vines, create_bang
+from sprites.linker.components import Statue

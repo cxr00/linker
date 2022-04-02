@@ -1,5 +1,5 @@
-from sprites.linker.components import LinkerSprite
-from sprites import LINKER
+from sprites.linker.components.base import LinkerSprite
+from sprites.linker.components.assets import LINKER
 
 
 class Item(LinkerSprite):

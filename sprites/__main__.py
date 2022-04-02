@@ -1,5 +1,6 @@
 import sprites
-from sprites import LINKER
+from sprites.linker import Statue
+from sprites.linker.components.assets import LINKER
 
 import pygame
 
@@ -27,6 +28,9 @@ screen.blit(LINKER["item"]["ink"]["pico-8"]["vial"], (200, 200))
 # Pencil
 screen.blit(LINKER["item"]["pencil"]["nes"]["case"], (220, 150))
 screen.blit(LINKER["item"]["pencil"]["nes"]["red"], (220, 150))
+
+statue = Statue("eye2")
+screen.blit(statue.surface, (500, 500))
 
 run = True
 while run:
