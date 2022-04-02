@@ -16,16 +16,16 @@ class Pencil(Item):
     """
     A pencil has a case and a fill color, either blue or red
     """
-    def __init__(self, palette="pico-8", color="blue"):
+    def __init__(self, color="blue", palette="pico-8"):
         super().__init__(palette)
         self.color = color
         self.set_surface()
 
     def set_surface(self):
-        dim = self["base"].get_size()
+        dim = self["case"].get_size()
         output = pygame.Surface(dim, pygame.SRCALPHA)
         output.blit(self[self.color], (0, 0))
-        output.blit(self["base"], (0, 0))
+        output.blit(self["case"], (0, 0))
         self.surface = output
 
     def change_color(self):
@@ -108,7 +108,7 @@ class Ink(Item):
     """
     Ink is used to write colored messages in important places
     """
-    def __init__(self, palette="pico-8", color="red"):
+    def __init__(self, color="red", palette="pico-8"):
         super().__init__(palette)
         self.color = color
         self.meter = self[self.color]

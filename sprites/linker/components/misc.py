@@ -16,3 +16,7 @@ class Dust(LinkerSprite):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["dust"], palette)
+
+
+class Test:
+    pass

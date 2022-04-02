@@ -1,5 +1,4 @@
-from sprites.linker import Statue, Scroll, Bang, Vines
-from sprites.linker.components.assets import LINKER
+from sprites import *
 
 import pygame
 
@@ -25,7 +24,8 @@ screen.blit(LINKER["item"]["ink"]["pico-8"]["blue"][2], (200, 200))
 screen.blit(LINKER["item"]["ink"]["pico-8"]["vial"], (200, 200))
 
 # Pencil
-screen.blit(LINKER["item"]["pencil"]["nes"]["case"], (220, 150))
+screen.blit(Pencil().surface, (400, 100))
+screen.blit(Pencil("red", palette="nes").surface, (220, 150))
 screen.blit(LINKER["item"]["pencil"]["nes"]["red"], (220, 150))
 
 statue = Statue("eye2")

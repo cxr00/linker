@@ -8,9 +8,9 @@ class LinkerSprite:
     A LinkerSprite is the base class for palette-swappable tiles
     """
     def __init__(self, base, palette="pico-8"):
-        self.base = base
+        self._base = base
         self.palette = palette
-        self._current = self.base[self.palette]
+        self._current = self._base[self.palette]
         self.surface = None
 
     def __getitem__(self, item):
@@ -21,7 +21,7 @@ class LinkerSprite:
             self.palette = "nes"
         else:
             self.palette = "pico-8"
-        self._current = self.base[self.palette]
+        self._current = self._base[self.palette]
         self.set_surface()
 
     def set_surface(self):
