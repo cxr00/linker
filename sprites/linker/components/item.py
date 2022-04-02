@@ -1,14 +1,15 @@
 from sprites.linker.components.base import LinkerSprite
 from sprites.linker.components.assets import LINKER
 
+import pygame
+
 
 class Item(LinkerSprite):
     """
     Items are special sprites which are contained in some sort of inventory
     """
-    def __init__(self, item_type, palette="pico-8"):
-        super().__init__(LINKER["item"][item_type], palette)
-        self.item_type = item_type
+    def __init__(self, palette="pico-8"):
+        super().__init__(LINKER["item"][type(self).__name__.lower()], palette)
 
 
 class Pencil(Item):
@@ -16,14 +17,23 @@ class Pencil(Item):
     A pencil has a case and a fill color, either blue or red
     """
     def __init__(self, palette="pico-8", color="blue"):
-        super().__init__("pencil", palette)
+        super().__init__(palette)
         self.color = color
+        self.set_surface()
+
+    def set_surface(self):
+        dim = self["base"].get_size()
+        output = pygame.Surface(dim, pygame.SRCALPHA)
+        output.blit(self[self.color], (0, 0))
+        output.blit(self["base"], (0, 0))
+        self.surface = output
 
     def change_color(self):
         if self.color == "blue":
             self.color = "red"
         else:
             self.color = "blue"
+        self.set_surface()
 
 
 class Bomb(Item):
@@ -31,7 +41,7 @@ class Bomb(Item):
     A bomb can be placed in order to destroy tiles. But be careful!
     """
     def __init__(self, palette="pico-8"):
-        super().__init__("bomb", palette)
+        super().__init__(palette)
 
 
 class Key(Item):
@@ -39,7 +49,11 @@ class Key(Item):
     Keys can be used to unlock chests ... and maybe other things!
     """
     def __init__(self, palette="pico-8"):
-        super().__init__("key", palette)
+        super().__init__(palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current
 
 
 class Sack(Item):
@@ -47,7 +61,11 @@ class Sack(Item):
     Sacks contain items. This might be the inventory icon
     """
     def __init__(self, palette="pico-8"):
-        super().__init__("sack", palette)
+        super().__init__(palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current
 
 
 class Gem(Item):
@@ -55,7 +73,11 @@ class Gem(Item):
     Gems are a valuable treasure. Collect them all!
     """
     def __init__(self, palette="pico-8"):
-        super().__init__("gem", palette)
+        super().__init__(palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current
 
 
 class Pearl(Item):
@@ -63,7 +85,11 @@ class Pearl(Item):
     Pearls are a valuable treasure. Collect them all!
     """
     def __init__(self, palette="pico-8"):
-        super().__init__("pearl", palette)
+        super().__init__(palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current
 
 
 class Relic(Item):
@@ -71,7 +97,11 @@ class Relic(Item):
     Relics are works of art from a long forgotten time
     """
     def __init__(self, palette="pico-8"):
-        super().__init__("relic", palette)
+        super().__init__(palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current
 
 
 class Ink(Item):
@@ -79,7 +109,7 @@ class Ink(Item):
     Ink is used to write colored messages in important places
     """
     def __init__(self, palette="pico-8", color="red"):
-        super().__init__("ink", palette)
+        super().__init__(palette)
         self.color = color
         self.meter = self[self.color]
 

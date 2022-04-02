@@ -11,9 +11,10 @@ class Filler(LinkerSprite):
     def __init__(self, tile_type=0, palette="pico-8"):
         super().__init__(LINKER["filler"], palette)
         self.tile_type = tile_type
+        self.set_surface()
 
-    def surface(self):
-        return self[self.tile_type]
+    def set_surface(self):
+        self.surface = self[self.tile_type]
 
 
 class Tile(LinkerSprite):
@@ -23,9 +24,10 @@ class Tile(LinkerSprite):
     def __init__(self, tile_type="smooth1", palette="pico-8"):
         super().__init__(LINKER["environment"]["tiles"], palette)
         self.tile_type = tile_type
+        self.set_surface()
 
-    def surface(self):
-        return self[self.tile_type]
+    def set_surface(self):
+        self.surface = self[self.tile_type]
 
 
 class Statue(LinkerSprite):
@@ -35,7 +37,6 @@ class Statue(LinkerSprite):
     def __init__(self, statue_type="horns1", palette="pico-8"):
         super().__init__(LINKER["environment"]["statues"], palette)
         self.statue_type = statue_type
-        self.surface = None
         self.set_surface()
 
     def set_surface(self):
@@ -46,10 +47,6 @@ class Statue(LinkerSprite):
         output.blit(s[1], (0, height))
         self.surface = output
 
-    def shift_palette(self):
-        super(Statue, self).shift_palette()
-        self.set_surface()
-
 
 class Accent(LinkerSprite):
     """
@@ -58,6 +55,10 @@ class Accent(LinkerSprite):
     def __init__(self, accent_type="grey", palette="pico-8"):
         super().__init__(LINKER["accents"], palette)
         self.accent_type = accent_type
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self[self.accent_type]
 
 
 class Stairs(LinkerSprite):
@@ -67,6 +68,10 @@ class Stairs(LinkerSprite):
     def __init__(self, stair_type=0, palette="pico-8"):
         super().__init__(LINKER["stairs"], palette)
         self.stair_type = stair_type
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self[self.stair_type]
 
 
 class Button(LinkerSprite):
@@ -75,6 +80,10 @@ class Button(LinkerSprite):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["button"], palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current
 
 
 class Vines(LinkerSprite):
@@ -86,6 +95,19 @@ class Vines(LinkerSprite):
         if height < 0:
             raise ValueError(f"Invalid height {height}, must be at least 0")
         self.height = height
+        self.set_surface()
+
+    def set_surface(self):
+        dim = self["base"].get_size()
+        output = pygame.Surface((dim[0], (self.height + 1) * dim[1]), pygame.SRCALPHA)
+
+        # base
+        output.blit(self["base"], (0, self.height * dim[1]))
+
+        for i in range(self.height):
+            output.blit(self[i % 2], (0, (self.height - i - 1) * dim[1]))
+
+        self.surface = output
 
 
 class Chest(LinkerSprite):
@@ -102,3 +124,7 @@ class Pot(LinkerSprite):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["pot"], palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current

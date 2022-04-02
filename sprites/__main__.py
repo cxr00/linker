@@ -1,5 +1,4 @@
-import sprites
-from sprites.linker import Statue
+from sprites.linker import Statue, Scroll, Bang, Vines
 from sprites.linker.components.assets import LINKER
 
 import pygame
@@ -10,16 +9,16 @@ screen = pygame.display.set_mode((640, 640))
 # Samples
 
 # Scrolls
-screen.blit(sprites.create_scroll(5, 7, palette="nes"), (100, 100))
-screen.blit(sprites.create_scroll(4, 3, palette="pico-8"), (200, 250))
+screen.blit(Scroll(5, 7, palette="nes").surface, (100, 100))
+screen.blit(Scroll(4, 3, palette="pico-8").surface, (200, 250))
 
 # Vines
-screen.blit(sprites.create_vines(3), (400, 400))
-screen.blit(sprites.create_vines(7, palette="nes"), (150, 220))
+screen.blit(Vines(3).surface, (400, 400))
+screen.blit(Vines(7, palette="nes").surface, (150, 220))
 
 # Bangs
-screen.blit(sprites.create_bang(), (500, 0))
-screen.blit(sprites.create_bang(5, 3, palette="nes"), (0, 100))
+screen.blit(Bang().surface, (500, 0))
+screen.blit(Bang(5, 3, palette="nes").surface, (0, 100))
 
 # Potion
 screen.blit(LINKER["item"]["ink"]["pico-8"]["blue"][2], (200, 200))
