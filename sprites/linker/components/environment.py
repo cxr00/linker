@@ -1,5 +1,5 @@
-from sprites.linker.components.base import LinkerSprite
-from sprites.linker.components.assets import LINKER
+from .base import LinkerSprite
+from .assets import LINKER
 
 import pygame
 
@@ -28,24 +28,6 @@ class Tile(LinkerSprite):
 
     def set_surface(self):
         self.surface = self[self.tile_type]
-
-
-class Statue(LinkerSprite):
-    """
-    Statue contains the various statues which can be found in the temple
-    """
-    def __init__(self, statue_type="horns1", palette="pico-8"):
-        super().__init__(LINKER["environment"]["statues"], palette)
-        self.statue_type = statue_type
-        self.set_surface()
-
-    def set_surface(self):
-        s = self[self.statue_type]
-        height = s[0].get_height()
-        output = pygame.Surface((s[0].get_width(), height * 2), pygame.SRCALPHA)
-        output.blit(s[0], (0, 0))
-        output.blit(s[1], (0, height))
-        self.surface = output
 
 
 class Accent(LinkerSprite):
@@ -86,6 +68,44 @@ class Button(LinkerSprite):
         self.surface = self._current
 
 
+class Chest(LinkerSprite):
+    """
+    A (potentially locked and) openable treasure chest
+    """
+    def __init__(self, palette="pico-8"):
+        super().__init__(LINKER["chest"], palette)
+
+
+class Pot(LinkerSprite):
+    """
+    A simple pot that can be full of liquid
+    """
+    def __init__(self, palette="pico-8"):
+        super().__init__(LINKER["pot"], palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current
+
+
+class Statue(LinkerSprite):
+    """
+    Statue contains the various statues which can be found in the temple
+    """
+    def __init__(self, statue_type="horns1", palette="pico-8"):
+        super().__init__(LINKER["environment"]["statues"], palette)
+        self.statue_type = statue_type
+        self.set_surface()
+
+    def set_surface(self):
+        s = self[self.statue_type]
+        height = s[0].get_height()
+        output = pygame.Surface((s[0].get_width(), height * 2), pygame.SRCALPHA)
+        output.blit(s[0], (0, 0))
+        output.blit(s[1], (0, height))
+        self.surface = output
+
+
 class Vines(LinkerSprite):
     """
     Variable-size pot of growing vines
@@ -108,23 +128,3 @@ class Vines(LinkerSprite):
             output.blit(self[i % 2], (0, (self.height - i - 1) * dim[1]))
 
         self.surface = output
-
-
-class Chest(LinkerSprite):
-    """
-    A (potentially locked and) openable treasure chest
-    """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["chest"], palette)
-
-
-class Pot(LinkerSprite):
-    """
-    A simple pot that can be full of liquid
-    """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["pot"], palette)
-        self.set_surface()
-
-    def set_surface(self):
-        self.surface = self._current

@@ -1,5 +1,5 @@
-from sprites.linker.components.base import LinkerSprite
-from sprites.linker.components.assets import LINKER
+from .base import LinkerSprite
+from .assets import LINKER
 
 import pygame
 

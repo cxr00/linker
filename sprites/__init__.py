@@ -1,1 +1,1 @@
-from sprites.spritesheet import Spritesheet
+from .spritesheet import Spritesheet

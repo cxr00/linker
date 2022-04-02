@@ -1,4 +1,4 @@
-from sprites.linker.components.assets import LINKER
+from .assets import LINKER
 
 import pygame
 
@@ -108,19 +108,3 @@ class Bang(LinkerSprite):
         output.blit(self["br"], (w_max, h_max))
 
         self.surface = output
-
-
-class Hand(LinkerSprite):
-    """
-    A simple UI element
-    """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["hand"], palette)
-
-
-class Dust(LinkerSprite):
-    """
-    A simple particle effect
-    """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["dust"], palette)
