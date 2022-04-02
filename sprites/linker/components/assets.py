@@ -9,7 +9,6 @@ sheet = pygame.image.load("sprites/linker/img/tiles.png")
 
 # Change this to change the size of the sprites
 scale = 3
-scaled = d * scale
 
 # Create and scale the sheet which will be organized
 comp = Spritesheet(sheet, d, d)
