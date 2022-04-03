@@ -1,3 +1,6 @@
+"""
+Contains Player and Fairy
+"""
 from .base import LinkerSprite
 from .assets import LINKER
 

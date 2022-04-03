@@ -1,3 +1,6 @@
+"""
+assets.py builds and houses LINKER, an 8x8 dual-palette sprite dictionary
+"""
 import pygame
 from sprites import Spritesheet
 
@@ -21,6 +24,13 @@ retrieving a sprite set is the palette. For example:
 ["player"]["pico-8"]
 ["environment"]["statues"]["nes"]
 ["dust"]["nes"]
+
+The only exception is tiles, where the palette is declared before the individual tiles.
+
+["environment"]["tile"]["pico-8"]["x"]
+["environment"]["tile"]["nes"]["pillar2"]
+
+This is because the tiles are more general, so their implementation of LinkerSprite differs slightly.
 """
 LINKER = {
     "player": {
@@ -214,7 +224,7 @@ LINKER = {
                 "smooth2": comp[3][6]
             }
         },
-        "statues": {
+        "statue": {
             "pico-8": {
                 "horns1": [comp[9][0], comp[10][0]],
                 "horns2": [comp[9][1], comp[10][1]],
@@ -257,7 +267,7 @@ LINKER = {
             "open": comp[14][6]
         }
     },
-    "vines": {
+    "vine": {
         "pico-8": {
             "base": comp[15][0],
             0: comp[14][0],
@@ -270,14 +280,8 @@ LINKER = {
         }
     },
     "fairy": {
-        "pico-8": {
-            0: comp[13][1],
-            1: comp[13][2]
-        },
-        "nes": {
-            0: comp[13][5],
-            1: comp[13][6]
-        }
+        "pico-8": [comp[13][1], comp[13][2]],
+        "nes": [comp[13][5], comp[13][6]]
     },
     "pot": {
         "pico-8": {

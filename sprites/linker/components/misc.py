@@ -1,3 +1,6 @@
+"""
+Contains anything that doesn't fit into another category
+"""
 from .base import LinkerSprite
 from .assets import LINKER
 

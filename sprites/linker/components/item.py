@@ -1,3 +1,6 @@
+"""
+Contains everything that will appear in the inventory
+"""
 from .base import LinkerSprite
 from .assets import LINKER
 
@@ -6,7 +9,7 @@ import pygame
 
 class Item(LinkerSprite):
     """
-    Items are special sprites which are contained in some sort of inventory
+    Items are special sprites which are contained in the Player's inventory
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["item"][type(self).__name__.lower()], palette)

@@ -1,3 +1,6 @@
+"""
+The basis of all implementations of LINKER sprites
+"""
 from .assets import LINKER
 
 import pygame
@@ -5,7 +8,7 @@ import pygame
 
 class LinkerSprite:
     """
-    A LinkerSprite is the base class for palette-swappable tiles
+    A LinkerSprite is the base class for LINKER sprites
     """
     def __init__(self, base, palette="pico-8"):
         self._base = base
@@ -17,6 +20,9 @@ class LinkerSprite:
         return self._current[item]
 
     def shift_palette(self):
+        """
+        Change the sprite's current palette between pico-8 and nes
+        """
         if self.palette == "pico-8":
             self.palette = "nes"
         else:
@@ -24,15 +30,28 @@ class LinkerSprite:
         self._current = self._base[self.palette]
         self.set_surface()
 
+    def set_palette(self, palette):
+        """
+        Explicitly set the current palette to pico-8 or nes
+        """
+        if palette not in ("pico-8", "nes"):
+            raise ValueError(f"Invalid palette {palette}, must be pico-8 or nes")
+        else:
+            if palette != self.palette:
+                self.shift_palette()
+
     def set_surface(self):
-        pass
+        """
+        Each LinkerSprite overrides this method to create an appropriate Surface
+        The Surface is then assigned to the self.surface attribute
+        """
+        self.surface = self.surface
 
 
 class ScalableSprite(LinkerSprite):
     """
     Scrolls and Bangs can have varying dimension, so their set_surface is defined here
     """
-
     def __init__(self, base, width=2, height=2, palette="pico-8"):
         super().__init__(base, palette)
         if width < 2 or height < 2:

@@ -1,3 +1,6 @@
+"""
+Contains fillers, floors, statues, and more
+"""
 from .base import LinkerSprite
 from .assets import LINKER
 
@@ -27,7 +30,6 @@ class Tile(LinkerSprite):
         self.set_surface()
 
     def set_surface(self):
-        # Note that this does not work for overriden for CrossTiles or BrickTiles
         self.surface = self[self.tile_type]
 
 
@@ -52,7 +54,7 @@ class BrickTile(LinkerSprite):
     """
     def __init__(self, size="small", shade="dark", palette="pico-8"):
         if size not in ("small", "big"):
-            raise ValueError(f"Invalid BrickTile size {size}, must be big or small")
+            raise ValueError(f"Invalid BrickTile size {size}, must be small or big")
         elif shade not in ("dark", "light"):
             raise ValueError(f"Invalid BrickTile shade {shade}, must be dark or light")
         super().__init__(LINKER["environment"]["tiles"], palette)
@@ -161,27 +163,47 @@ class Statue(LinkerSprite):
     Statue contains the various statues which can be found in the temple
     """
     def __init__(self, statue_type="horns1", palette="pico-8"):
-        super().__init__(LINKER["environment"]["statues"], palette)
+        super().__init__(LINKER["environment"]["statue"], palette)
         self.statue_type = statue_type
         self.set_surface()
 
     def set_surface(self):
         s = self[self.statue_type]
-        height = s[0].get_height()
-        output = pygame.Surface((s[0].get_width(), height * 2), pygame.SRCALPHA)
+        dim = s[0].get_size()
+        output = pygame.Surface((dim[0], dim[1] * 2), pygame.SRCALPHA)
         output.blit(s[0], (0, 0))
-        output.blit(s[1], (0, height))
+        output.blit(s[1], (0, dim[1]))
         self.surface = output
 
 
-class Vines(LinkerSprite):
+class Plinth(LinkerSprite):
     """
-    Variable-size pot of growing vines
+    Plinths can serve as accents, or hold Statues
+    """
+    def __init__(self, plinth_type=1, palette="pico-8"):
+        if plinth_type not in (1, 2):
+            raise ValueError(f"Invalid plinth type {plinth_type}, must be 1 or 2")
+        super().__init__(LINKER["environment"]["statue"], palette)
+        self.plinth_type = plinth_type
+        self.set_surface()
+
+    def set_surface(self):
+        s = self[f"plinth{self.plinth_type}"]
+        dim = s[0].get_size()
+        output = pygame.Surface((dim[0] * 2, dim[1]), pygame.SRCALPHA)
+        output.blit(s[0], (0, 0))
+        output.blit(s[1], (dim[0], 0))
+        self.surface = output
+
+
+class Vine(LinkerSprite):
+    """
+    Variable-size pot which grows a vine
     """
     def __init__(self, height=0, palette="pico-8"):
-        super().__init__(LINKER["vines"], palette)
+        super().__init__(LINKER["vine"], palette)
         if height < 0:
-            raise ValueError(f"Invalid Vines height {height}, must be at least 0")
+            raise ValueError(f"Invalid Vine height {height}, must be at least 0")
         self.height = height
         self.set_surface()
 
@@ -206,4 +228,4 @@ class Vines(LinkerSprite):
             self.height -= 1
             self.set_surface()
         else:
-            raise ValueError("Cannot shrink Vines below a height of zero")
+            raise ValueError("Cannot shrink Vine below a height of zero")

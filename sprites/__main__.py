@@ -10,12 +10,13 @@ player = Player()
 player.change_state("fall")
 
 scrolls = Scroll(5, 7, palette="nes"), Scroll(4, 3)
-vines = Vines(3), Vines(7, palette="nes")
+vines = Vine(3), Vine(7, palette="nes")
 bangs = Bang(), Bang(5, 3, palette="nes")
 ink = Ink(level=2)
 pencils = Pencil(), Pencil("red", palette="nes")
 statue = Statue("horns1")
 dust = Dust()
+plinth = Plinth(2)
 
 
 def sample_draw():
@@ -64,6 +65,11 @@ def sample_draw():
     if random.randint(0, 10) == 0:
         statue.shift_palette()
     screen.blit(statue.surface, (500, 500))
+
+    # Plinth
+    if random.randint(0, 10) == 0:
+        plinth.shift_palette()
+    screen.blit(plinth.surface, (500, 595))
 
     # Dust
     screen.blit(dust.surface, (500, 300))
