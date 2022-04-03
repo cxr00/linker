@@ -48,10 +48,14 @@ class Player(LinkerSprite):
             self.surface = pygame.transform.flip(self.surface, True, False)
 
     def turn_left(self):
-        self.left = True
+        if not self.left:
+            self.left = True
+            self.set_surface()
 
     def turn_right(self):
-        self.left = False
+        if self.left:
+            self.left = False
+            self.set_surface()
 
     def tick(self):
         self.frame = (self.frame + 1) % Player.lengths[self.state]
