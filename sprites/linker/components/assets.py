@@ -279,7 +279,7 @@ LINKER = {
             1: comp[13][4]
         }
     },
-    "fairy": {
+    "demon": {
         "pico-8": [comp[13][1], comp[13][2]],
         "nes": [comp[13][5], comp[13][6]]
     },

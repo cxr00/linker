@@ -1,5 +1,5 @@
 """
-Contains Player and Fairy
+Contains Player and Demon
 """
 from .base import LinkerSprite
 from .assets import LINKER
@@ -11,6 +11,10 @@ class Player(LinkerSprite):
     """
     Player is the player
     """
+
+    # The length of each animation state
+    lengths = {"fade": 3, "idle": 1, "walk": 7, "fall": 6}
+
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["player"], palette)
         self.state = "idle"
@@ -33,7 +37,7 @@ class Player(LinkerSprite):
 
     def change_state(self, state):
         if state not in ("fade", "idle", "walk", "fall"):
-            raise ValueError("Invalid player state {state}")
+            raise ValueError(f"Invalid player state {state}")
         self.state = state
         self.frame = 0
         self.set_surface()
@@ -43,17 +47,23 @@ class Player(LinkerSprite):
         if self.left:
             self.surface = pygame.transform.flip(self.surface, True, False)
 
+    def turn_left(self):
+        self.left = True
+
+    def turn_right(self):
+        self.left = False
+
     def tick(self):
-        self.frame = (self.frame + 1) % len(self.sprites[self.state])
+        self.frame = (self.frame + 1) % Player.lengths[self.state]
         self.set_surface()
 
 
-class Fairy(LinkerSprite):
+class Demon(LinkerSprite):
     """
-    A cute little fairy
+    A cute little demon
     """
     def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["fairy"], palette)
+        super().__init__(LINKER["demon"], palette)
         self.frame = 0
         self.set_surface()
 

@@ -7,7 +7,7 @@ pygame.init()
 screen = pygame.display.set_mode((640, 640))
 
 player = Player()
-player.change_state("fall")
+player.change_state("walk")
 
 scrolls = Scroll(5, 7, palette="nes"), Scroll(4, 3)
 vines = Vine(3), Vine(7, palette="nes")
@@ -17,6 +17,7 @@ pencils = Pencil(), Pencil("red", palette="nes")
 statue = Statue("horns1")
 dust = Dust()
 plinth = Plinth(2)
+demons = Demon(), Demon()
 
 
 def sample_draw():
@@ -74,6 +75,14 @@ def sample_draw():
     # Dust
     screen.blit(dust.surface, (500, 300))
     dust.tick()
+
+    # Fairies
+    for d in demons:
+        if random.randint(0, 10) == 0:
+            d.shift_palette()
+        d.tick()
+    screen.blit(demons[0].surface, (0, 500))
+    screen.blit(demons[1].surface, (0, 550))
 
     # Player
     screen.blit(player.surface, (500, 200))

@@ -3,7 +3,7 @@ The component classes for LINKER
 """
 from .base import Scroll, Bang
 
-from .character import Player, Fairy
+from .character import Player, Demon
 
 from .environment import Filler, Tile, Accent, Stairs
 from .environment import Button, Chest, Pot
