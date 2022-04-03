@@ -46,8 +46,8 @@ LINKER = {
         }
     },
     "dust": {
-        "pico-8": [comp[3][8], comp[3][9], comp[3][10]],
-        "nes": [comp[12][8], comp[12][9], comp[12][10]]
+        "pico-8": [comp[3][8], comp[3][9], comp[3][10], comp[1][12]],
+        "nes": [comp[12][8], comp[12][9], comp[12][10], comp[10][12]]
     },
     "scroll": {
         "pico-8": {
