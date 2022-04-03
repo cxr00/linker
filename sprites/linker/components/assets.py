@@ -15,7 +15,7 @@ scale = 3
 
 # Create and scale the sheet which will be organized
 comp = Spritesheet(sheet, d, d)
-comp.scale_sheet(scale)
+comp.scale_sheet(scale, scale)
 
 """
 The dictionary is arranged such that the final argument when
