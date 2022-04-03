@@ -1,4 +1,4 @@
-from .components import LinkerSprite, Scroll, Bang
+from .components import Scroll, Bang
 
 from .components import Player, Fairy
 

@@ -1,6 +1,6 @@
 from .spritesheet import Spritesheet
 
-from .linker import LinkerSprite, Scroll, Bang
+from .linker import Scroll, Bang
 
 from .linker import Player, Fairy
 

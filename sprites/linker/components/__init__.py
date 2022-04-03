@@ -1,4 +1,4 @@
-from .base import LinkerSprite, Scroll, Bang
+from .base import Scroll, Bang
 
 from .character import Player, Fairy
 
