@@ -20,7 +20,7 @@ class Spritesheet:
         self.height = image.get_height() // height
         self.scale = 1
 
-        self.sprites = [[] for _ in range(self.height)]
+        self.sprites: list[list[pygame.Surface]] = [[] for _ in range(self.height)]
         for x in range(self.width):
             for y in range(self.height):
                 s = pygame.Surface((width, height), pygame.SRCALPHA)
@@ -35,7 +35,7 @@ class Spritesheet:
 
     def scale_sheet(self, scale: int):
         """
-        Increase or decrease the scale of the Spritesheet
+        Increase the scale of the Spritesheet
         """
         if scale > 0:
             self.scale *= scale
@@ -46,10 +46,19 @@ class Spritesheet:
                 self[y][x] = pygame.transform.scale(self[y][x], (self.width * self.scale, self.height * self.scale))
 
     def get_dim(self):
+        """
+        Get the dimensions of the sprite according to scale
+        """
         return self.width * self.scale, self.height * self.scale
 
     def get_width(self):
+        """
+        Get the width of the sprite according to scale
+        """
         return self.width * self.scale
 
     def get_height(self):
+        """
+        Get the height of the sprite according to scale
+        """
         return self.height * self.scale
