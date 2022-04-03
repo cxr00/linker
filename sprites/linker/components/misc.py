@@ -8,6 +8,18 @@ class Hand(LinkerSprite):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["hand"], palette)
+        self.state = "point"
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self[self.state]
+
+    def set_state(self, state):
+        if state not in ("point", "grab"):
+            raise ValueError(f"Invalid Hand state {state}, must be point or grab")
+        else:
+            self.state = state
+            self.set_surface()
 
 
 class Dust(LinkerSprite):
@@ -16,7 +28,24 @@ class Dust(LinkerSprite):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["dust"], palette)
+        self.frame = 0
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self[self.frame]
+
+    def tick(self):
+        self.frame = (self.frame + 1) % 3
+        self.set_surface()
 
 
-class Test:
-    pass
+class Shadow(LinkerSprite):
+    """
+    An undershadow for items which appear in the overworld
+    """
+    def __init__(self, palette="pico-8"):
+        super().__init__(LINKER["shadow"], palette)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self._current

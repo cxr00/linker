@@ -28,12 +28,13 @@ class LinkerSprite:
         pass
 
 
-class Scroll(LinkerSprite):
+class ScalableSprite(LinkerSprite):
     """
-    A variable-size UI element for displaying text, inventory, etc
+    Scrolls and Bangs can have varying dimension, so their set_surface is defined here
     """
-    def __init__(self, width=2, height=2, palette="pico-8"):
-        super().__init__(LINKER["scroll"], palette)
+
+    def __init__(self, base, width=2, height=2, palette="pico-8"):
+        super().__init__(base, palette)
         if width < 2 or height < 2:
             raise ValueError(f"Invalid dimension {width}x{height}, must be at least 2x2")
         self.width = width
@@ -69,42 +70,17 @@ class Scroll(LinkerSprite):
         self.surface = output
 
 
-class Bang(LinkerSprite):
+class Scroll(ScalableSprite):
     """
-    A variable-size UI element and effect
+    A UI element for displaying text, inventory, etc
     """
     def __init__(self, width=2, height=2, palette="pico-8"):
-        super().__init__(LINKER["bang"], palette)
-        if width < 2 or height < 2:
-            raise ValueError(f"Invalid dimension {width}x{height}, must be at least 2x2")
-        self.width = width
-        self.height = height
-        self.set_surface()
+        super().__init__(LINKER["scroll"], width, height, palette)
 
-    def set_surface(self):
-        dim = self["tl"].get_size()
-        output = pygame.Surface((dim[0] * self.width, dim[1] * self.height), pygame.SRCALPHA)
 
-        w_max = (self.width - 1) * dim[0]
-        h_max = (self.height - 1) * dim[1]
-
-        # top
-        output.blit(self["tl"], (0, 0))
-        for i in range(1, self.width - 1):
-            output.blit(self["t"], (i * dim[0], 0))
-        output.blit(self["tr"], (w_max, 0))
-
-        # middle
-        for i in range(1, self.height - 1):
-            output.blit(self["ml"], (0, i * dim[1]))
-            for j in range(1, self.width - 1):
-                output.blit(self["m"], (j * dim[0], i * dim[1]))
-            output.blit(self["mr"], (w_max, i * dim[1]))
-
-        # bottom
-        output.blit(self["bl"], (0, h_max))
-        for i in range(1, self.width - 1):
-            output.blit(self["b"], (i * dim[0], h_max))
-        output.blit(self["br"], (w_max, h_max))
-
-        self.surface = output
+class Bang(ScalableSprite):
+    """
+    A UI element and effect
+    """
+    def __init__(self, width=2, height=2, palette="pico-8"):
+        super().__init__(LINKER["bang"], width, height, palette)

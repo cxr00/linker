@@ -42,6 +42,15 @@ class Bomb(Item):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(palette)
+        self.frame = 0
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self[self.frame]
+
+    def tick(self):
+        self.frame = (self.frame + 1) % 4
+        self.set_surface()
 
 
 class Key(Item):
@@ -108,15 +117,30 @@ class Ink(Item):
     """
     Ink is used to write colored messages in important places
     """
-    def __init__(self, color="red", palette="pico-8"):
+    def __init__(self, color="blue", level=6, palette="pico-8"):
         super().__init__(palette)
         self.color = color
-        self.meter = self[self.color]
+        self.level = level
+        self.set_surface()
+
+    def set_surface(self):
+        dim = self["vial"].get_size()
+        if self.level > 0:
+            fill = self[self.color][6 - self.level]
+        else:
+            fill = pygame.Surface(dim, pygame.SRCALPHA)
+        output = pygame.Surface(dim, pygame.SRCALPHA)
+        output.blit(fill, (0, 0))
+        output.blit(self["vial"], (0, 0))
+        self.surface = output
 
     def change_color(self):
         if self.color == "red":
             self.color = "blue"
         else:
             self.color = "red"
-        self.meter = self[self.color]
 
+    def set_level(self, level):
+        if 0 <= level <= 6:
+            self.level = level
+        self.set_surface()

@@ -25,8 +25,8 @@ retrieving a sprite set is the palette. For example:
 LINKER = {
     "player": {
         "pico-8": {
-            "fade": [comp[0][8], comp[0][9]],
-            "idle": comp[1][9],
+            "fade": [comp[0][8], comp[0][9], comp[0][10]],
+            "idle": [comp[1][9]],
             "walk": [
                 comp[0][10], comp[0][11], comp[0][12], comp[1][8], comp[1][9], comp[1][10], comp[1][11]
             ],
@@ -35,8 +35,8 @@ LINKER = {
             ]
         },
         "nes": {
-            "fade": [comp[9][8], comp[9][9]],
-            "idle": comp[10][9],
+            "fade": [comp[9][8], comp[9][9], comp[9][10]],
+            "idle": [comp[10][9]],
             "walk": [
                 comp[9][10], comp[9][11], comp[9][12], comp[10][8], comp[10][9], comp[10][10], comp[10][11]
             ],
@@ -222,7 +222,7 @@ LINKER = {
                 "eye2": [comp[9][3], comp[10][3]],
                 "a1": [comp[11][2], comp[12][2]],
                 "a2": [comp[11][3], comp[12][3]],
-                "plinth": [comp[11][0], comp[11][1]],
+                "plinth1": [comp[11][0], comp[11][1]],
                 "plinth2": [comp[12][0], comp[12][1]]
             },
             "nes": {
@@ -316,5 +316,9 @@ LINKER = {
     "button": {
         "pico-8": comp[0][0],
         "nes": comp[0][4]
+    },
+    "shadow": {
+        "pico-8": comp[4][9],
+        "nes": comp[13][9]
     }
 }
