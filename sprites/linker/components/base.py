@@ -45,15 +45,17 @@ class LinkerSprite:
     def set_surface(self):
         """
         Each LinkerSprite overrides this method to create an appropriate Surface
-        The Surface is then assigned to the self.surface attribute
+        for its state and palette, and then assigns it to surface attribute
         """
-        self.surface = self.surface
 
     def get_size(self):
         return self.surface.get_size()
 
     def get_rect(self, pos):
         return pygame.Rect(pos, self.get_size())
+
+    def draw(self, surface, pos):
+        surface.blit(self.surface, pos)
 
 
 class ScalableSprite(LinkerSprite):

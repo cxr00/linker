@@ -31,6 +31,7 @@ class Dust(LinkerSprite):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["dust"], palette)
+        self.timer = 0
         self.frame = 0
         self.set_surface()
 
@@ -38,8 +39,10 @@ class Dust(LinkerSprite):
         self.surface = self[self.frame]
 
     def tick(self):
-        self.frame = (self.frame + 1) % 3
-        self.set_surface()
+        self.timer = (self.timer + 1) % 5
+        if self.timer == 0:
+            self.frame = (self.frame + 1) % 3
+            self.set_surface()
 
 
 class Shadow(LinkerSprite):

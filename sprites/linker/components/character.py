@@ -18,6 +18,7 @@ class Player(LinkerSprite):
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["player"], palette)
         self.state = "idle"
+        self.timer = 0
         self.frame = 0
         self.left = True
         self.sprites = {}
@@ -58,8 +59,10 @@ class Player(LinkerSprite):
             self.set_surface()
 
     def tick(self):
-        self.frame = (self.frame + 1) % Player.lengths[self.state]
-        self.set_surface()
+        self.timer = (self.timer + 1) % 5
+        if self.timer == 0:
+            self.frame = (self.frame + 1) % Player.lengths[self.state]
+            self.set_surface()
 
 
 class Demon(LinkerSprite):
@@ -68,6 +71,7 @@ class Demon(LinkerSprite):
     """
     def __init__(self, palette="pico-8"):
         super().__init__(LINKER["demon"], palette)
+        self.timer = 0
         self.frame = 0
         self.set_surface()
 
@@ -75,5 +79,7 @@ class Demon(LinkerSprite):
         self.surface = self[self.frame]
 
     def tick(self):
-        self.frame = (self.frame + 1) % 2
-        self.set_surface()
+        self.timer = (self.timer + 1) % 5
+        if self.timer == 0:
+            self.frame = (self.frame + 1) % 2
+            self.set_surface()

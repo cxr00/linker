@@ -3,18 +3,20 @@ from sprites import *
 import pygame
 import random
 import itertools
+import time
 
 pygame.init()
 WIDTH, HEIGHT = 672, 672
-scroll_speed = 30
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+# The player is special
 player = Player()
-player.change_state("walk")
+player.change_state("fall")
 
+# Various LinkerSprites
 scrolls = Scroll(5, 7, palette="nes"), Scroll(4, 3)
 vines = Vine(3), Vine(7, palette="nes")
-bangs = Bang(), Bang(5, 3, palette="nes")
+bangs = Bang(2, 3), Bang(5, 3, palette="nes")
 ink = Ink(level=2)
 pencils = Pencil(), Pencil("red", palette="nes")
 statue = Statue("horns1")
@@ -22,111 +24,153 @@ dust = Dust()
 plinth = Plinth(1)
 demons = Demon(), Demon()
 
-chunk_width, chunk_height = 14, 14
-map_size = 10
+# Chunks in a map must be the same size
+chunk_dim = 14, 14
 
-game_map = Map()
-for x, y in itertools.product(range(-map_size+1, map_size), repeat=2):
-    chunk = Chunk(chunk_width, chunk_height)
-    for i, j in itertools.product(range(chunk_width), range(chunk_height)):
-        chunk[i][j] = Filler(tile_type=random.randint(0, 2), palette=random.choice(["pico-8", "nes"]))
+# The range of x and y values for the game map.
+map_dim = 20
+map_range1, map_range2 = range(-map_dim+1, map_dim), range(-2, 2)
+
+# Track the time it takes to construct the map
+start_time = time.time()
+
+# Generate the game map
+game_map = Map(chunk_dim)
+for x, y in itertools.product(map_range1, map_range2):
+    chunk = Chunk(chunk_dim)
+    for i, j in itertools.product(range(chunk_dim[0]), range(chunk_dim[1])):
+        chunk[j][i] = Filler(tile_type=(i + j) % 3)
     game_map[x, y] = chunk
+print(f"Map of {game_map.get_size()} tiles generated in {time.time() - start_time}")
 
+
+# The offset determines the region of the map which will be drawn
 offset = [0, 0]
 
 
+def lotto():
+    """
+    Determine if a palette or color shift event occurs
+    """
+    return random.randint(0, 50) == 0
+
+
 def sample_draw():
+    """
+    Test the various linker components
+    """
     screen.fill((0, 0, 0))
 
-    corners = (-offset[0], -offset[1]), (WIDTH-offset[0], -offset[1]), (-offset[0], HEIGHT-offset[1]), (WIDTH-offset[0], HEIGHT-offset[1])
+    # The corners are used to determine whether a chunk is drawn
+    corners = (
+        pygame.Rect((-offset[0], -offset[1]), (WIDTH // 2, HEIGHT // 2)),
+        pygame.Rect((-offset[0], HEIGHT // 2 - offset[1]), (WIDTH // 2, HEIGHT // 2)),
+        pygame.Rect((WIDTH // 2 - offset[0], -offset[1]), (WIDTH // 2, HEIGHT // 2)),
+        pygame.Rect((WIDTH // 2 - offset[0], HEIGHT // 2 - offset[1]), (WIDTH // 2, HEIGHT // 2))
+    )
+
+    # Draw game map
     game_map.draw(screen, corners, offset)
 
     # Scrolls
     for s in scrolls:
-        if random.randint(0, 10) == 0:
+        if lotto():
             s.shift_palette()
-    screen.blit(scrolls[0].surface, (100 + offset[0], 100 + offset[1]))
-    screen.blit(scrolls[1].surface, (200 + offset[0], 250 + offset[1]))
+    scrolls[0].draw(screen, (100 + offset[0], 100 + offset[1]))
+    scrolls[1].draw(screen, (200 + offset[0], 250 + offset[1]))
 
     # Vines
     for v in vines:
-        if random.randint(0, 10) == 0:
+        if lotto():
             v.shift_palette()
-    screen.blit(vines[0].surface, (400 + offset[0], 400 + offset[1]))
-    screen.blit(vines[1].surface, (150 + offset[0], 220 + offset[1]))
+    vines[0].draw(screen, (400 + offset[0], 400 + offset[1]))
+    vines[1].draw(screen, (150 + offset[0], 220 + offset[1]))
 
     # Bangs
     for b in bangs:
-        if random.randint(0, 10) == 0:
+        if lotto():
             b.shift_palette()
-    screen.blit(bangs[0].surface, (500 + offset[0], offset[1]))
-    screen.blit(bangs[1].surface, (offset[0], 100 + offset[1]))
+    bangs[0].draw(screen, (500 + offset[0], offset[1]))
+    bangs[1].draw(screen, (offset[0], 100 + offset[1]))
 
     # Ink
-    if random.randint(0, 10) == 0:
+    if lotto():
         ink.shift_palette()
-    if random.randint(0, 10) == 0:
+    if lotto():
         ink.set_level((ink.level - 1) % 7)
-    if random.randint(0, 10) == 0:
+    if lotto():
         ink.change_color()
-    screen.blit(ink.surface, (400 + offset[0], 200 + offset[1]))
+    ink.draw(screen, (400 + offset[0], 200 + offset[1]))
 
     # Pencil
     for p in pencils:
-        if random.randint(0, 10) == 0:
+        if lotto():
             p.shift_palette()
-        if random.randint(0, 10) == 0:
+        if lotto():
             p.change_color()
-    screen.blit(pencils[0].surface, (400 + offset[0], 100 + offset[1]))
-    screen.blit(pencils[1].surface, (250 + offset[0], 150 + offset[1]))
+    pencils[0].draw(screen, (400 + offset[0], 100 + offset[1]))
+    pencils[1].draw(screen, (250 + offset[0], 150 + offset[1]))
 
     # Statue
-    if random.randint(0, 10) == 0:
+    if lotto():
         statue.shift_palette()
-    screen.blit(statue.surface, (500 + offset[0], 500 + offset[1]))
+    statue.draw(screen, (500 + offset[0], 500 + offset[1]))
 
     # Plinth
-    if random.randint(0, 10) == 0:
+    if lotto():
         plinth.shift_palette()
-    screen.blit(plinth.surface, (500 + offset[0], 595 + offset[1]))
+    plinth.draw(screen, (500 + offset[0], 610 + offset[1]))
 
     # Dust
-    screen.blit(dust.surface, (500 + offset[0], 300 + offset[1]))
+    dust.draw(screen, (500 + offset[0], 300 + offset[1]))
     dust.tick()
+    if lotto():
+        dust.shift_palette()
 
     # Fairies
     for d in demons:
-        if random.randint(0, 10) == 0:
+        if lotto():
             d.shift_palette()
         d.tick()
-    screen.blit(demons[0].surface, (offset[0], 500 + offset[1]))
-    screen.blit(demons[1].surface, (offset[0], 550 + offset[1]))
+    demons[0].draw(screen, (offset[0], 500 + offset[1]))
+    demons[1].draw(screen, (offset[0], 550 + offset[1]))
 
     # Player
-    screen.blit(player.surface, (500 + offset[0], 200 + offset[1]))
+    player.draw(screen, (500 + offset[0], 200 + offset[1]))
     player.tick()
+    if lotto():
+        player.shift_palette()
+    if lotto():
+        player.turn_left()
+    elif lotto():
+        player.turn_right()
 
     text = pygame.font.Font(None, 32).render(f"{-offset[0]},{-offset[1]}", True, (255, 255, 255))
     screen.blit(text, (0, 0))
 
 
 run = True
+FPS = 60
+clock = pygame.time.Clock()
+scroll_speed = 10
 while run:
+    clock.tick(FPS)
     pygame.event.post(pygame.event.Event(pygame.USEREVENT))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.KEYDOWN:
             pass
-        pos = pygame.mouse.get_pos()
-        if pos[0] <= 30:
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_LEFT]:
             offset[0] += scroll_speed
-        elif pos[0] >= WIDTH - 30:
+        if pressed[pygame.K_RIGHT]:
             offset[0] -= scroll_speed
-        if pos[1] <= 30:
+
+        if pressed[pygame.K_UP]:
             offset[1] += scroll_speed
-        elif pos[1] >= HEIGHT - 30:
+        if pressed[pygame.K_DOWN]:
             offset[1] -= scroll_speed
+
     sample_draw()
     pygame.display.update()
-    pygame.time.wait(100)

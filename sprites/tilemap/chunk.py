@@ -1,6 +1,5 @@
 import pygame
 import itertools
-import random
 
 from typing import Optional
 from sprites import LinkerSprite, sprite_size
@@ -8,10 +7,10 @@ from sprites import LinkerSprite, sprite_size
 
 class Chunk:
 
-    def __init__(self, width, height):
-        self._chunk: list[list[Optional[LinkerSprite]]] = [[None for __ in range(width)] for _ in range(height)]
-        self.width = width
-        self.height = height
+    def __init__(self, dim):
+        self._chunk: list[list[Optional[LinkerSprite]]] = [[None for __ in range(dim[0])] for _ in range(dim[1])]
+        self.width = dim[0]
+        self.height = dim[1]
 
     def __getitem__(self, item):
         return self._chunk[item]
@@ -29,14 +28,21 @@ class Chunk:
 
 class Map:
 
-    def __init__(self):
+    def __init__(self, chunk_dim):
         self._map = {}
+        self._chunk_width = chunk_dim[0]
+        self._chunk_height = chunk_dim[1]
 
     def __getitem__(self, item: tuple[int, int]):
         return self._map[item]
 
     def __setitem__(self, key: tuple[int, int], value: Chunk):
+        if value.get_size() != (self._chunk_width, self._chunk_height):
+            raise ValueError(f"Invalid chunk dimensions {value.get_size()}, must be {self._chunk_width, self._chunk_height}")
         self._map[key] = value
+
+    def __iter__(self):
+        return iter(self.keys())
 
     def keys(self):
         return self._map.keys()
@@ -46,26 +52,29 @@ class Map:
 
     def get_range(self):
         if not self._map:
-            return (0, 0), (0, 0)
+            return range(0, 0), range(0, 0)
         o = sorted(self.keys())
-        map_range = o[0], o[-1]
+        map_range = range(o[0][0], o[-1][0] + 1), range(o[0][1], o[-1][1] + 1)
         return map_range
 
+    def get_size(self):
+        if not self._map:
+            return 0
+        s = self[0, 0].get_size()
+        return s[0] * s[1] * len(self.values())
+
     def draw(self, screen, corners, offset):
-        map_range = self.get_range()
-        for i, j in itertools.product(range(map_range[0][0], map_range[1][0] + 1), range(map_range[0][1], map_range[1][1] + 1)):
+        range1, range2 = self.get_range()
+        for i, j in itertools.product(range1, range2):
             chunk = self[i, j]
-            chunk_size = chunk.get_size()
             surface_size = chunk.get_surface_size()
             rel_loc = (surface_size[0] * i, surface_size[1] * j)
             rect = chunk.get_rect(rel_loc)
             for corner in corners:
-                if rect.collidepoint(corner):
-                    for k, l in itertools.product(range(chunk_size[0]), range(chunk_size[1])):
-                        if chunk[k][l]:
-                            chunk_rect = chunk[k][l].get_rect((k * sprite_size[0] + rel_loc[0] + offset[0], l * sprite_size[1] + rel_loc[1] + offset[1]))
-
-                            screen.blit(chunk[k][l].surface, chunk_rect)
-                            if random.randint(0, 10) == 0:
-                                chunk[k][l].shift_palette()
+                if rect.colliderect(corner):
+                    for k, l in itertools.product(range(self._chunk_width), range(self._chunk_height)):
+                        if chunk[l][k]:
+                            chunk_rect = chunk[l][k].get_rect((k * sprite_size[0] + rel_loc[0] + offset[0], l * sprite_size[1] + rel_loc[1] + offset[1]))
+                            if chunk_rect.colliderect(screen.get_rect()):
+                                screen.blit(chunk[l][k].surface, chunk_rect)
                     break
