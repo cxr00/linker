@@ -30,8 +30,8 @@ class Player(LinkerSprite):
         self.sprites["walk"] = self["walk"]
         self.sprites["fall"] = self["fall"]
 
-    def shift_palette(self):
-        super(Player, self).shift_palette()
+    def shift_palette(self, set_surface=False):
+        super(Player, self).shift_palette(set_surface)
         self.set_sprites()
         self.set_surface()
 

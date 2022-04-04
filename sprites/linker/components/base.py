@@ -19,7 +19,7 @@ class LinkerSprite:
     def __getitem__(self, item):
         return self._current[item]
 
-    def shift_palette(self):
+    def shift_palette(self, set_surface=True):
         """
         Change the sprite's current palette between pico-8 and nes
         """
@@ -28,7 +28,9 @@ class LinkerSprite:
         else:
             self.palette = "pico-8"
         self._current = self._base[self.palette]
-        self.set_surface()
+        # Avoids setting the surface twice when Player palette is shifted
+        if set_surface:
+            self.set_surface()
 
     def set_palette(self, palette):
         """
@@ -46,6 +48,9 @@ class LinkerSprite:
         The Surface is then assigned to the self.surface attribute
         """
         self.surface = self.surface
+
+    def get_size(self):
+        return self.surface.get_size()
 
 
 class ScalableSprite(LinkerSprite):
