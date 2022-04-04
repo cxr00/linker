@@ -17,6 +17,8 @@ scale = 3
 comp = Spritesheet(sheet, d, d)
 comp.scale_sheet(scale, scale)
 
+sprite_size = comp[0][0].get_size()
+
 """
 The dictionary is arranged such that the final argument when
 retrieving a sprite set is the palette. For example:

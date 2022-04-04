@@ -52,6 +52,9 @@ class LinkerSprite:
     def get_size(self):
         return self.surface.get_size()
 
+    def get_rect(self, pos):
+        return pygame.Rect(pos, self.get_size())
+
 
 class ScalableSprite(LinkerSprite):
     """
