@@ -1,9 +1,11 @@
-from sprites import *
-
 import pygame
 import random
 import itertools
 import time
+
+from sprites import *
+from tilemap import Chunk, Map
+del linker, spritesheet
 
 pygame.init()
 WIDTH, HEIGHT = 672, 672
@@ -28,8 +30,8 @@ demons = Demon(), Demon()
 chunk_dim = 14, 14
 
 # The range of x and y values for the game map.
-map_dim = 20
-map_range1, map_range2 = range(-map_dim+1, map_dim), range(-2, 2)
+map_dim = 40
+map_range1, map_range2 = range(-map_dim+1, map_dim), range(-map_dim+1, map_dim)
 
 # Track the time it takes to construct the map
 start_time = time.time()
@@ -39,7 +41,7 @@ game_map = Map(chunk_dim)
 for x, y in itertools.product(map_range1, map_range2):
     chunk = Chunk(chunk_dim)
     for i, j in itertools.product(range(chunk_dim[0]), range(chunk_dim[1])):
-        chunk[j][i] = Filler(tile_type=(i + j) % 3)
+        chunk[j][i] = Filler(tile_type=(i + x*chunk_dim[1] + j + y*chunk_dim[0]) % 3)
     game_map[x, y] = chunk
 print(f"Map of {game_map.get_size()} tiles generated in {time.time() - start_time}")
 
