@@ -10,7 +10,7 @@ from sprites import Spritesheet
 d = 8
 
 # The image we will be pulling from
-sheet = pygame.image.load(os.path.join("\\".join(__file__.split("\\")[:-1]),  "img", "tiles.png"))
+sheet = pygame.image.load(os.path.join(os.path.dirname(__file__),  "img", "tiles.png"))
 
 # Change this to change the size of the sprites
 scale = 3
