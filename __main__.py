@@ -73,9 +73,6 @@ dust = Dust()
 plinth = Plinth(1)
 demons = Demon(), Demon()
 
-# Chunks in a map must be the same size
-chunk_dim = 14, 14
-
 # The range of x and y values for the game map.
 map_dim = 5
 map_range1, map_range2 = range(-map_dim+1, map_dim), range(-map_dim+1, map_dim)
@@ -88,7 +85,7 @@ game_map = Map()
 for x, y in itertools.product(map_range1, map_range2):
     chunk = Chunk()
     for i, j in itertools.product(range(chunk_size[0]), range(chunk_size[1])):
-        chunk[j][i] = Filler(tile_type=(i + x*chunk_size[1] + j + y*chunk_dim[0]) % 3)
+        chunk[j][i] = Filler(tile_type=(i + x*chunk_size[1] + j + y*chunk_size[0]) % 3)
     game_map[x, y] = chunk
 print(f"Map of {game_map.get_size()} tiles generated in {time.time() - start_time}")
 
