@@ -4,12 +4,16 @@ import itertools
 import time
 
 from sprites import *
-from tilemap import Chunk, Map
+from tilemap import Chunk, Map, chunk_size
 del linker, spritesheet
 
 pygame.init()
 WIDTH, HEIGHT = 672, 672
+FPS = 60
+scroll_speed = 10
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
+font = pygame.font.Font(None, 32)
+clock = pygame.time.Clock()
 
 # The player is special
 player = Player()
@@ -30,21 +34,22 @@ demons = Demon(), Demon()
 chunk_dim = 14, 14
 
 # The range of x and y values for the game map.
-map_dim = 40
+map_dim = 5
 map_range1, map_range2 = range(-map_dim+1, map_dim), range(-map_dim+1, map_dim)
 
 # Track the time it takes to construct the map
 start_time = time.time()
 
 # Generate the game map
-game_map = Map(chunk_dim)
+game_map = Map()
 for x, y in itertools.product(map_range1, map_range2):
-    chunk = Chunk(chunk_dim)
-    for i, j in itertools.product(range(chunk_dim[0]), range(chunk_dim[1])):
-        chunk[j][i] = Filler(tile_type=(i + x*chunk_dim[1] + j + y*chunk_dim[0]) % 3)
+    chunk = Chunk()
+    for i, j in itertools.product(range(chunk_size[0]), range(chunk_size[1])):
+        chunk[j][i] = Filler(tile_type=(i + x*chunk_size[1] + j + y*chunk_dim[0]) % 3)
     game_map[x, y] = chunk
 print(f"Map of {game_map.get_size()} tiles generated in {time.time() - start_time}")
 
+game_map.update_range()
 
 # The offset determines the region of the map which will be drawn
 offset = [0, 0]
@@ -64,15 +69,26 @@ def sample_draw():
     screen.fill((0, 0, 0))
 
     # The corners are used to determine whether a chunk is drawn
+    corner_size = WIDTH // 2, HEIGHT // 2
     corners = (
-        pygame.Rect((-offset[0], -offset[1]), (WIDTH // 2, HEIGHT // 2)),
-        pygame.Rect((-offset[0], HEIGHT // 2 - offset[1]), (WIDTH // 2, HEIGHT // 2)),
-        pygame.Rect((WIDTH // 2 - offset[0], -offset[1]), (WIDTH // 2, HEIGHT // 2)),
-        pygame.Rect((WIDTH // 2 - offset[0], HEIGHT // 2 - offset[1]), (WIDTH // 2, HEIGHT // 2))
+        pygame.Rect((-offset[0], -offset[1]), corner_size),
+        pygame.Rect((-offset[0], HEIGHT // 2 - offset[1]), corner_size),
+        pygame.Rect((WIDTH // 2 - offset[0], -offset[1]), corner_size),
+        pygame.Rect((WIDTH // 2 - offset[0], HEIGHT // 2 - offset[1]), corner_size)
     )
 
+    r = pygame.Surface((250, 250), pygame.SRCALPHA)
+    pygame.draw.line(r, (100, 100, 100), (0, 0), (0, 249))
+    pygame.draw.line(r, (100, 100, 100), (0, 249), (249, 249))
+    pygame.draw.line(r, (100, 100, 100), (249, 249), (249, 0))
+    pygame.draw.line(r, (100, 100, 100), (249, 0), (0, 0))
+    # r.fill((100, 100, 100))
+
+    rect = r.get_rect(topleft=(200, 200))
+    game_map.draw(screen, corners, offset, rect=rect)
+
     # Draw game map
-    game_map.draw(screen, corners, offset)
+    # game_map.draw(screen, corners, offset)
 
     # Scrolls
     for s in scrolls:
@@ -147,14 +163,15 @@ def sample_draw():
     elif lotto():
         player.turn_right()
 
-    text = pygame.font.Font(None, 32).render(f"{-offset[0]},{-offset[1]}", True, (255, 255, 255))
+    text = font.render(f"{-offset[0]},{-offset[1]}", True, (255, 255, 255))
     screen.blit(text, (0, 0))
+    text = font.render(f"{int(clock.get_fps())}", True, (255, 255, 255))
+    screen.blit(text, (0, 100))
+
+    screen.blit(r, rect)
 
 
 run = True
-FPS = 60
-clock = pygame.time.Clock()
-scroll_speed = 10
 while run:
     clock.tick(FPS)
     pygame.event.post(pygame.event.Event(pygame.USEREVENT))
