@@ -2,13 +2,15 @@
 assets.py builds and houses LINKER, an 8x8 dual-palette sprite dictionary
 """
 import pygame
+import os
+
 from sprites import Spritesheet
 
 # The true dimension of each sprite in the sheet
 d = 8
 
 # The image we will be pulling from
-sheet = pygame.image.load("sprites/linker/img/tiles.png")
+sheet = pygame.image.load(os.path.join("\\".join(__file__.split("\\")[:-1]),  "img", "tiles.png"))
 
 # Change this to change the size of the sprites
 scale = 3
