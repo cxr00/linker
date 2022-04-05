@@ -1,6 +1,7 @@
 """
-The central container of the asset management system
+Import the LINKER sprite dictionary
 """
+
 from .spritesheet import Spritesheet
 
 from .linker import LinkerSprite, Scroll, Bang

@@ -5,8 +5,9 @@ import time
 
 from sprites import *
 from tilemap import Chunk, Map, chunk_size
-del linker, spritesheet
+del linker, Spritesheet
 
+# pygame
 pygame.init()
 WIDTH, HEIGHT = 672, 672
 FPS = 60
@@ -14,6 +15,48 @@ scroll_speed = 10
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 font = pygame.font.Font(None, 32)
 clock = pygame.time.Clock()
+
+
+class Camera:
+    """
+    The Camera stores the current relative location on the screen
+    """
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+
+    def offset(self):
+        return self.x, self.y
+
+    def negative(self):
+        return -self.x, -self.y
+
+    def update(self, keys_pressed):
+        if keys_pressed[pygame.K_LEFT]:
+            self.left()
+        if keys_pressed[pygame.K_RIGHT]:
+            self.right()
+
+        if keys_pressed[pygame.K_UP]:
+            self.up()
+        if keys_pressed[pygame.K_DOWN]:
+            self.down()
+
+    def up(self):
+        self.y += scroll_speed
+
+    def down(self):
+        self.y -= scroll_speed
+
+    def left(self):
+        self.x += scroll_speed
+
+    def right(self):
+        self.x -= scroll_speed
+
+
+camera = Camera()
+
 
 # The player is special
 player = Player()
@@ -51,9 +94,6 @@ print(f"Map of {game_map.get_size()} tiles generated in {time.time() - start_tim
 
 game_map.update_range()
 
-# The offset determines the region of the map which will be drawn
-offset = [0, 0]
-
 
 def lotto():
     """
@@ -64,17 +104,17 @@ def lotto():
 
 def sample_draw():
     """
-    Test the various linker components
+    Test the various linker linker
     """
     screen.fill((0, 0, 0))
 
     # The corners are used to determine whether a chunk is drawn
     corner_size = WIDTH // 2, HEIGHT // 2
     corners = (
-        pygame.Rect((-offset[0], -offset[1]), corner_size),
-        pygame.Rect((-offset[0], HEIGHT // 2 - offset[1]), corner_size),
-        pygame.Rect((WIDTH // 2 - offset[0], -offset[1]), corner_size),
-        pygame.Rect((WIDTH // 2 - offset[0], HEIGHT // 2 - offset[1]), corner_size)
+        pygame.Rect(camera.negative(), corner_size),
+        pygame.Rect((-camera.x, HEIGHT // 2 - camera.y), corner_size),
+        pygame.Rect((WIDTH // 2 - camera.x, -camera.y), corner_size),
+        pygame.Rect((WIDTH // 2 - camera.x, HEIGHT // 2 - camera.y), corner_size)
     )
 
     r = pygame.Surface((250, 250), pygame.SRCALPHA)
@@ -85,7 +125,7 @@ def sample_draw():
     # r.fill((100, 100, 100))
 
     rect = r.get_rect(topleft=(200, 200))
-    game_map.draw(screen, corners, offset, rect=rect)
+    game_map.draw(screen, corners, camera.offset(), rect=rect)
 
     # Draw game map
     # game_map.draw(screen, corners, offset)
@@ -94,22 +134,22 @@ def sample_draw():
     for s in scrolls:
         if lotto():
             s.shift_palette()
-    scrolls[0].draw(screen, (100 + offset[0], 100 + offset[1]))
-    scrolls[1].draw(screen, (200 + offset[0], 250 + offset[1]))
+    scrolls[0].draw(screen, (100 + camera.x, 100 + camera.y))
+    scrolls[1].draw(screen, (200 + camera.x, 250 + camera.y))
 
     # Vines
     for v in vines:
         if lotto():
             v.shift_palette()
-    vines[0].draw(screen, (400 + offset[0], 400 + offset[1]))
-    vines[1].draw(screen, (150 + offset[0], 220 + offset[1]))
+    vines[0].draw(screen, (400 + camera.x, 400 + camera.y))
+    vines[1].draw(screen, (150 + camera.x, 220 + camera.y))
 
     # Bangs
     for b in bangs:
         if lotto():
             b.shift_palette()
-    bangs[0].draw(screen, (500 + offset[0], offset[1]))
-    bangs[1].draw(screen, (offset[0], 100 + offset[1]))
+    bangs[0].draw(screen, (500 + camera.x, camera.y))
+    bangs[1].draw(screen, (camera.x, 100 + camera.y))
 
     # Ink
     if lotto():
@@ -118,7 +158,7 @@ def sample_draw():
         ink.set_level((ink.level - 1) % 7)
     if lotto():
         ink.change_color()
-    ink.draw(screen, (400 + offset[0], 200 + offset[1]))
+    ink.draw(screen, (400 + camera.x, 200 + camera.y))
 
     # Pencil
     for p in pencils:
@@ -126,21 +166,21 @@ def sample_draw():
             p.shift_palette()
         if lotto():
             p.change_color()
-    pencils[0].draw(screen, (400 + offset[0], 100 + offset[1]))
-    pencils[1].draw(screen, (250 + offset[0], 150 + offset[1]))
+    pencils[0].draw(screen, (400 + camera.x, 100 + camera.y))
+    pencils[1].draw(screen, (250 + camera.x, 150 + camera.y))
 
     # Statue
     if lotto():
         statue.shift_palette()
-    statue.draw(screen, (500 + offset[0], 500 + offset[1]))
+    statue.draw(screen, (500 + camera.x, 500 + camera.y))
 
     # Plinth
     if lotto():
         plinth.shift_palette()
-    plinth.draw(screen, (500 + offset[0], 610 + offset[1]))
+    plinth.draw(screen, (500 + camera.x, 610 + camera.y))
 
     # Dust
-    dust.draw(screen, (500 + offset[0], 300 + offset[1]))
+    dust.draw(screen, (500 + camera.x, 300 + camera.y))
     dust.tick()
     if lotto():
         dust.shift_palette()
@@ -150,11 +190,11 @@ def sample_draw():
         if lotto():
             d.shift_palette()
         d.tick()
-    demons[0].draw(screen, (offset[0], 500 + offset[1]))
-    demons[1].draw(screen, (offset[0], 550 + offset[1]))
+    demons[0].draw(screen, (camera.x, 500 + camera.y))
+    demons[1].draw(screen, (camera.x, 550 + camera.y))
 
     # Player
-    player.draw(screen, (500 + offset[0], 200 + offset[1]))
+    player.draw(screen, (500 + camera.x, 200 + camera.y))
     player.tick()
     if lotto():
         player.shift_palette()
@@ -163,7 +203,7 @@ def sample_draw():
     elif lotto():
         player.turn_right()
 
-    text = font.render(f"{-offset[0]},{-offset[1]}", True, (255, 255, 255))
+    text = font.render(f"{camera.negative()}", True, (255, 255, 255))
     screen.blit(text, (0, 0))
     text = font.render(f"{int(clock.get_fps())}", True, (255, 255, 255))
     screen.blit(text, (0, 100))
@@ -180,16 +220,9 @@ while run:
             run = False
         elif event.type == pygame.KEYDOWN:
             pass
-        pressed = pygame.key.get_pressed()
-        if pressed[pygame.K_LEFT]:
-            offset[0] += scroll_speed
-        if pressed[pygame.K_RIGHT]:
-            offset[0] -= scroll_speed
 
-        if pressed[pygame.K_UP]:
-            offset[1] += scroll_speed
-        if pressed[pygame.K_DOWN]:
-            offset[1] -= scroll_speed
+    pressed = pygame.key.get_pressed()
+    camera.update(pressed)
 
     sample_draw()
     pygame.display.update()

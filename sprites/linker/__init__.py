@@ -1,16 +1,16 @@
 """
-The implementation of the LINKER sprite dictionary
+The component classes for LINKER
 """
-from .components import LinkerSprite, Scroll, Bang
+from .base import LinkerSprite, Scroll, Bang
 
-from .components import Player, Demon
+from .character import Player, Demon
 
-from .components import Filler, Tile, Accent, Stairs
-from .components import Button, Chest, Pot
-from .components import Statue, Plinth, Vine
+from .environment import Filler, Tile, Accent, Stairs
+from .environment import Button, Chest, Pot
+from .environment import Statue, Plinth, Vine
 
-from .components import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
+from .item import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
 
-from .components import Hand, Dust
+from .misc import Hand, Dust
 
-from .components import sprite_size
+from .assets import sprite_size
