@@ -54,6 +54,12 @@ class LinkerSprite:
     def get_rect(self, pos):
         return pygame.Rect(pos, self.get_size())
 
+    def colliderect(self, rect):
+        """
+        By default, LinkerSprites have no collision
+        """
+        return False
+
     def draw(self, surface, pos):
         surface.blit(self.surface, pos)
 
