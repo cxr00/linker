@@ -2,7 +2,7 @@
 
 Welcome! This package collects the resources provided at [this link](https://linker.itch.io/adventure-tiles) and sorts them into easily-accessible objects.
 
-All you need to do is clone/download this repository, and add the asset pack you purchased to `assets/img/tiles.png`. This gives you access to all of `LINKER`'s functionality in just a few steps.
+All you need to do is clone/download this repository, and add the asset pack you purchased to `sprites/linker/img/tiles.png`. This gives you access to all of `LINKER`'s functionality in just a few steps.
 
 We can break the entire process down as such:
 
