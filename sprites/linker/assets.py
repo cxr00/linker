@@ -300,12 +300,14 @@ LINKER = {
     "accents": {
         "pico-8": {
             "grey": comp[3][1],
+            "gray": comp[3][1],
             "black": comp[4][1],
             "light": comp[6][1],
             "dark": comp[7][1]
         },
         "nes": {
             "grey": comp[3][5],
+            "gray": comp[3][5],
             "black": comp[4][5],
             "light": comp[6][5],
             "dark": comp[7][5]
