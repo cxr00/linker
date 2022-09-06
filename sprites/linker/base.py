@@ -10,11 +10,12 @@ class LinkerSprite:
     """
     A LinkerSprite is the base class for LINKER sprites
     """
-    def __init__(self, base, palette="pico-8"):
+    def __init__(self, base, palette="pico-8", pos=(0, 0)):
         self._base = base
         self.palette = palette
         self._current = self._base[self.palette]
         self.surface = None
+        self.pos = pos
 
     def __getitem__(self, item):
         return self._current[item]
@@ -51,25 +52,22 @@ class LinkerSprite:
     def get_size(self):
         return self.surface.get_size()
 
-    def get_rect(self, pos):
-        return pygame.Rect(pos, self.get_size())
+    def get_rect(self):
+        return pygame.Rect(self.pos, self.get_size())
 
     def colliderect(self, rect):
-        """
-        By default, LinkerSprites have no collision
-        """
-        return False
+        return rect.colliderect(self.get_rect())
 
-    def draw(self, surface, pos):
-        surface.blit(self.surface, pos)
+    def draw(self, surface):
+        surface.blit(self.surface, self.pos)
 
 
 class ScalableSprite(LinkerSprite):
     """
     Scrolls and Bangs can have varying dimension, so their set_surface is defined here
     """
-    def __init__(self, base, width=2, height=2, palette="pico-8"):
-        super().__init__(base, palette)
+    def __init__(self, base, width=2, height=2, palette="pico-8", pos=(0, 0)):
+        super().__init__(base, palette, pos)
         if width < 2 or height < 2:
             raise ValueError(f"Invalid dimension {width}x{height}, must be at least 2x2")
         self.width = width
@@ -109,13 +107,13 @@ class Scroll(ScalableSprite):
     """
     A UI element for displaying text, inventory, etc
     """
-    def __init__(self, width=2, height=2, palette="pico-8"):
-        super().__init__(LINKER["scroll"], width, height, palette)
+    def __init__(self, width=2, height=2, palette="pico-8", pos=(0, 0)):
+        super().__init__(LINKER["scroll"], width, height, palette, pos)
 
 
 class Bang(ScalableSprite):
     """
     A UI element and effect
     """
-    def __init__(self, width=2, height=2, palette="pico-8"):
-        super().__init__(LINKER["bang"], width, height, palette)
+    def __init__(self, width=2, height=2, palette="pico-8", pos=(0, 0)):
+        super().__init__(LINKER["bang"], width, height, palette, pos)

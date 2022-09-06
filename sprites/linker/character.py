@@ -15,11 +15,12 @@ class Player(LinkerSprite):
     # The length of each animation state
     lengths = {"fade": 3, "idle": 1, "walk": 7, "fall": 6}
 
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["player"], palette)
+    def __init__(self, palette="pico-8", pos=(0, 0), tick_rate=5):
+        super().__init__(LINKER["player"], palette, pos)
         self.state = "idle"
         self.timer = 0
         self.frame = 0
+        self.tick_rate = tick_rate
         self.left = True
         self.sprites = {}
         self.set_sprites()
@@ -59,7 +60,7 @@ class Player(LinkerSprite):
             self.set_surface()
 
     def tick(self):
-        self.timer = (self.timer + 1) % 5
+        self.timer = (self.timer + 1) % self.tick_rate
         if self.timer == 0:
             self.frame = (self.frame + 1) % Player.lengths[self.state]
             self.set_surface()
@@ -69,17 +70,18 @@ class Demon(LinkerSprite):
     """
     A cute little demon
     """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["demon"], palette)
+    def __init__(self, palette="pico-8", pos=(0, 0), tick_rate=5):
+        super().__init__(LINKER["demon"], palette, pos)
         self.timer = 0
         self.frame = 0
+        self.tick_rate = 5
         self.set_surface()
 
     def set_surface(self):
         self.surface = self[self.frame]
 
     def tick(self):
-        self.timer = (self.timer + 1) % 5
+        self.timer = (self.timer + 1) % self.tick_rate
         if self.timer == 0:
             self.frame = (self.frame + 1) % 2
             self.set_surface()

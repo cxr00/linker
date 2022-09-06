@@ -77,7 +77,7 @@ class Map:
                 if chunk_rect.colliderect(corner):
                     for k, l in itertools.product(range(chunk_size[0]), range(chunk_size[1])):
                         if chunk[l][k]:
-                            tile_rect = chunk[l][k].get_rect((k * sprite_size[0] + tile_offset[0], l * sprite_size[1] + tile_offset[1]))
-                            if tile_rect.colliderect(rect):
-                                chunk[l][k].draw(screen, tile_rect)
+                            chunk[l][k].pos = (k * sprite_size[0] + tile_offset[0], l * sprite_size[1] + tile_offset[1])
+                            if chunk[l][k].colliderect(rect):
+                                chunk[l][k].draw(screen)
                     break

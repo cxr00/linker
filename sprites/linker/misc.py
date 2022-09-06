@@ -9,8 +9,8 @@ class Hand(LinkerSprite):
     """
     A simple UI element
     """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["hand"], palette)
+    def __init__(self, palette="pico-8", pos=(0, 0)):
+        super().__init__(LINKER["hand"], palette, pos)
         self.state = "point"
         self.set_surface()
 
@@ -29,8 +29,8 @@ class Dust(LinkerSprite):
     """
     A simple particle effect
     """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["dust"], palette)
+    def __init__(self, palette="pico-8", pos=(0, 0)):
+        super().__init__(LINKER["dust"], palette, pos)
         self.timer = 0
         self.frame = 0
         self.set_surface()
@@ -49,8 +49,8 @@ class Shadow(LinkerSprite):
     """
     An undershadow for items which appear in the overworld
     """
-    def __init__(self, palette="pico-8"):
-        super().__init__(LINKER["shadow"], palette)
+    def __init__(self, palette="pico-8", pos=(0, 0)):
+        super().__init__(LINKER["shadow"], palette, pos)
         self.set_surface()
 
     def set_surface(self):
