@@ -20,6 +20,18 @@ class Filler(LinkerSprite):
         self.surface = self[self.tile_type]
 
 
+class Hole(LinkerSprite):
+    """
+    Holes can be fallen down. Be careful!
+    """
+    def __init__(self, palette="pico-8", pos=(0, 0)):
+        super().__init__(LINKER["environment"]["tiles"], palette, pos)
+        self.set_surface()
+
+    def set_surface(self):
+        self.surface = self["hole"]
+
+
 class Tile(LinkerSprite):
     """
     Tile contains the variety of tiles which the player can walk on
