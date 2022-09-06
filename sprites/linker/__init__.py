@@ -11,6 +11,6 @@ from .environment import Statue, Plinth, Vine
 
 from .item import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
 
-from .misc import Hand, Dust
+from .misc import Hand, Dust, Shadow
 
 from .assets import sprite_size

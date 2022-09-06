@@ -26,7 +26,7 @@ The dictionary is arranged such that the final argument when
 retrieving a sprite set is the palette. For example:
 
 ["player"]["pico-8"]
-["environment"]["statues"]["nes"]
+["environment"]["statue"]["nes"]
 ["dust"]["nes"]
 
 The only exception is tiles, where the palette is declared before the individual tiles.

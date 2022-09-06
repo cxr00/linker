@@ -120,15 +120,11 @@ class Chest(LinkerSprite):
         if self.state == "closed":
             self.state = "open"
             self.set_surface()
-        else:
-            raise AttributeError("Chest is already opened")
 
     def close(self):
         if self.state == "open":
             self.state = "closed"
             self.set_surface()
-        else:
-            raise AttributeError("Chest is already closed")
 
 
 class Pot(LinkerSprite):
@@ -225,3 +221,7 @@ class Vine(LinkerSprite):
             self.set_surface()
         else:
             raise ValueError("Cannot shrink Vine below a height of zero")
+
+    def draw(self, surface):
+        base_size = self["base"].get_size()
+        surface.blit(self.surface, (self.pos[0], self.pos[1] - base_size[1]*self.height))

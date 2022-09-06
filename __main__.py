@@ -60,7 +60,7 @@ camera = Camera()
 
 # The player is special
 player = Player()
-player.change_state("fall")
+player.change_state("walk")
 
 # Various LinkerSprites
 scrolls = Scroll(5, 7, palette="nes"), Scroll(4, 3)
@@ -72,6 +72,7 @@ statue = Statue("horns1")
 dust = Dust()
 plinth = Plinth(1)
 demons = Demon(), Demon()
+pot = Pot()
 
 # The range of x and y values for the game map.
 map_dim = 5
@@ -80,7 +81,7 @@ map_range1, map_range2 = range(-map_dim+1, map_dim), range(-map_dim+1, map_dim)
 # Track the time it takes to construct the map
 start_time = time.time()
 
-# Generate the game map
+# Generate a test game map
 game_map = Map()
 for x, y in itertools.product(map_range1, map_range2):
     chunk = Chunk()
@@ -122,31 +123,37 @@ def sample_draw():
     # r.fill((100, 100, 100))
 
     rect = r.get_rect(topleft=(200, 200))
-    game_map.draw(screen, corners, camera.offset(), rect=rect)
+    # game_map.draw(screen, corners, camera.offset(), rect=rect)
 
     # Draw game map
-    # game_map.draw(screen, corners, offset)
+    game_map.draw(screen, corners, camera.offset())
 
     # Scrolls
     for s in scrolls:
         if lotto():
             s.shift_palette()
-    scrolls[0].draw(screen, (100 + camera.x, 100 + camera.y))
-    scrolls[1].draw(screen, (200 + camera.x, 250 + camera.y))
+    scrolls[0].pos = (100 + camera.x, 100 + camera.y)
+    scrolls[0].draw(screen)
+    scrolls[1].pos = (200 + camera.x, 250 + camera.y)
+    scrolls[1].draw(screen)
 
     # Vines
     for v in vines:
         if lotto():
             v.shift_palette()
-    vines[0].draw(screen, (400 + camera.x, 400 + camera.y))
-    vines[1].draw(screen, (150 + camera.x, 220 + camera.y))
+    vines[0].pos = (400 + camera.x, 400 + camera.y)
+    vines[0].draw(screen)
+    vines[1].pos = (150 + camera.x, 220 + camera.y)
+    vines[1].draw(screen)
 
     # Bangs
     for b in bangs:
         if lotto():
             b.shift_palette()
-    bangs[0].draw(screen, (500 + camera.x, camera.y))
-    bangs[1].draw(screen, (camera.x, 100 + camera.y))
+    bangs[0].pos = (500 + camera.x, camera.y)
+    bangs[0].draw(screen)
+    bangs[1].pos = (camera.x, 100 + camera.y)
+    bangs[1].draw(screen)
 
     # Ink
     if lotto():
@@ -155,7 +162,8 @@ def sample_draw():
         ink.set_level((ink.level - 1) % 7)
     if lotto():
         ink.change_color()
-    ink.draw(screen, (400 + camera.x, 200 + camera.y))
+    ink.pos = (400 + camera.x, 200 + camera.y)
+    ink.draw(screen)
 
     # Pencil
     for p in pencils:
@@ -163,21 +171,26 @@ def sample_draw():
             p.shift_palette()
         if lotto():
             p.change_color()
-    pencils[0].draw(screen, (400 + camera.x, 100 + camera.y))
-    pencils[1].draw(screen, (250 + camera.x, 150 + camera.y))
+    pencils[0].pos = (400 + camera.x, 100 + camera.y)
+    pencils[0].draw(screen)
+    pencils[1].pos = (250 + camera.x, 150 + camera.y)
+    pencils[1].draw(screen)
 
     # Statue
     if lotto():
         statue.shift_palette()
-    statue.draw(screen, (500 + camera.x, 500 + camera.y))
+    statue.pos = (500 + camera.x, 500 + camera.y)
+    statue.draw(screen)
 
     # Plinth
     if lotto():
         plinth.shift_palette()
-    plinth.draw(screen, (500 + camera.x, 610 + camera.y))
+    plinth.pos = (500 + camera.x, 610 + camera.y)
+    plinth.draw(screen)
 
     # Dust
-    dust.draw(screen, (500 + camera.x, 300 + camera.y))
+    dust.pos = (500 + camera.x, 300 + camera.y)
+    dust.draw(screen)
     dust.tick()
     if lotto():
         dust.shift_palette()
@@ -187,11 +200,14 @@ def sample_draw():
         if lotto():
             d.shift_palette()
         d.tick()
-    demons[0].draw(screen, (camera.x, 500 + camera.y))
-    demons[1].draw(screen, (camera.x, 550 + camera.y))
+    demons[0].pos = (camera.x, 500 + camera.y)
+    demons[0].draw(screen)
+    demons[1].pos = (camera.x, 550 + camera.y)
+    demons[1].draw(screen)
 
     # Player
-    player.draw(screen, (500 + camera.x, 200 + camera.y))
+    player.pos = (500 + camera.x, 200 + camera.y)
+    player.draw(screen)
     player.tick()
     if lotto():
         player.shift_palette()
@@ -199,6 +215,15 @@ def sample_draw():
         player.turn_left()
     elif lotto():
         player.turn_right()
+
+    # Pot
+    pot.pos = (100, 10)
+    pot.draw(screen)
+    if lotto():
+        if pot.state == "empty":
+            pot.fill()
+        else:
+            pot.empty()
 
     text = font.render(f"{camera.negative()}", True, (255, 255, 255))
     screen.blit(text, (0, 0))

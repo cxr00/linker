@@ -38,22 +38,33 @@ class Pencil(Item):
             self.color = "blue"
         self.set_surface()
 
+    def set_color(self, color):
+        if color in ("blue", "red"):
+            self.color = color
+            self.set_surface()
+        else:
+            raise ValueError(f"Invalid color {color} specified; must be 'blue' or 'red'")
+
 
 class Bomb(Item):
     """
     A bomb can be placed in order to destroy tiles. But be careful!
     """
-    def __init__(self, palette="pico-8", pos=(0, 0)):
+    def __init__(self, palette="pico-8", pos=(0, 0), tick_rate=5):
         super().__init__(palette, pos)
         self.frame = 0
+        self.timer = 0
+        self.tick_rate = tick_rate
         self.set_surface()
 
     def set_surface(self):
         self.surface = self[self.frame]
 
     def tick(self):
-        self.frame = (self.frame + 1) % 4
-        self.set_surface()
+        self.timer = (self.timer + 1) % self.tick_rate
+        if self.timer == 0:
+            self.frame = (self.frame + 1) % 4
+            self.set_surface()
 
 
 class Key(Item):
@@ -143,7 +154,24 @@ class Ink(Item):
         else:
             self.color = "red"
 
+    def set_color(self, color):
+        if color in ("blue", "red"):
+            self.color = color
+            self.set_surface()
+        else:
+            raise ValueError(f"Invalid color {color} specified; must be 'blue' or 'red'")
+
     def set_level(self, level):
         if 0 <= level <= 6:
             self.level = level
+        else:
+            raise ValueError(f"Invalid ink level {level} specified; must be between 0 and 6 inclusive")
+        self.set_surface()
+
+    def fill(self):
+        self.level = 6
+        self.set_surface()
+
+    def empty(self):
+        self.level = 0
         self.set_surface()
