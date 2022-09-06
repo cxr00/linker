@@ -6,6 +6,7 @@ from .base import LinkerSprite, Scroll, Bang
 from .character import Player, Demon
 
 from .environment import Filler, Tile, Accent, Stairs
+from .environment import Hole, CrossTile, BrickTile
 from .environment import Button, Chest, Pot
 from .environment import Statue, Plinth, Vine
 

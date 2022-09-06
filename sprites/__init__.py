@@ -9,6 +9,7 @@ from .linker import LinkerSprite, Scroll, Bang
 from .linker import Player, Demon
 
 from .linker import Filler, Tile, Accent, Stairs
+from .linker import Hole, CrossTile, BrickTile
 from .linker import Button, Chest, Pot
 from .linker import Statue, Plinth, Vine
 
