@@ -3,7 +3,7 @@
 Spritesheet dissects an image into a 2D array of equally-sized sprites. Members of a Spritesheet may be accessed with `__getitem__` so you can focus on filtering the sheet into an appropriate data structure.
 
 ```python
-from sprites import Spritesheet
+from linker import Spritesheet
 import pygame
 
 # The dimensions of an individual tile or sprite

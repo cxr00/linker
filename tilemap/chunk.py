@@ -5,7 +5,7 @@ import pygame
 import itertools
 
 from typing import Optional
-from sprites import LinkerSprite, sprite_size
+from linker import LinkerSprite, sprite_size
 
 
 def dot(a, b):

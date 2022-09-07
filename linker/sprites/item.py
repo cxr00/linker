@@ -60,7 +60,7 @@ class Bomb(Item):
     def set_surface(self):
         self.surface = self[self.frame]
 
-    def tick(self):
+    def update(self):
         self.timer = (self.timer + 1) % self.tick_rate
         if self.timer == 0:
             self.frame = (self.frame + 1) % 4

@@ -6,11 +6,12 @@ from .assets import LINKER
 import pygame
 
 
-class LinkerSprite:
+class LinkerSprite(pygame.sprite.Sprite):
     """
     A LinkerSprite is the base class for LINKER sprites
     """
     def __init__(self, base, palette="pico-8", pos=(0, 0)):
+        super().__init__()
         self._base = base
         self.palette = palette
         self._current = self._base[self.palette]

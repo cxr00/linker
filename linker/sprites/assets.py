@@ -4,7 +4,7 @@ assets.py builds and houses LINKER, an 8x8 dual-palette sprite dictionary
 import pygame
 import os
 
-from sprites import Spritesheet
+from linker import Spritesheet
 
 # The true dimension of each sprite in the sheet
 d = 8

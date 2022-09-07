@@ -1,18 +1,18 @@
 # Overview
 
-Welcome! This package collects the resources provided at [this link](https://linker.itch.io/adventure-tiles) and sorts them into easily-accessible objects.
+Welcome! This package collects Linker's [8-bit Adventure Tile set](https://linker.itch.io/adventure-tiles) and sorts them into easily-accessible objects.
 
-All you need to do is clone/download this repository, and add the asset pack you purchased to `sprites/linker/img/tiles.png`. This gives you access to all of `LINKER`'s functionality in just a few steps.
+All you need to do is clone/download this repository, and add the asset pack you purchased to `linker/sprites/img/tiles.png`. This gives you access to all of `linker`'s functionality in just a few steps.
 
 What I've done can be broken down into a few harder-than-they-seem steps:
 
 * Slice the sprite sheet into equal-sized tiles
 * Sort sprites into items (player cycles, vines, etc)
 * Assign dictionary keys to each object (that's what `assets.py` does)
-* Create classes for each sprite (as seen in `sprites.linker`)
+* Create classes for each sprite (as seen in `linker.sprites`)
 * Add expected behavior (vine growth, player movement, animation frames) to each class
 
-As you'll notice from those last two steps, I've made it WAY easy to use the assets in Linker's tileset. All you have to do is import the pre-made objects directly from `sprites` and use the pre-built functionality for each sprite's typical behavior. Keep reading for a breakdown of each of the available objects.
+As you'll notice from those last two steps, I've made it WAY easy to use Linker's tileset. All you have to do is import the pre-made objects directly from `linker` and use the pre-built functionality for each sprite's typical behavior. Keep reading for a breakdown of each of the available objects.
 
 This README should have everything you need to work with this library, so I highly recommend putting it somewhere that's easy to find so you have a reference while you learn to use it.
 
@@ -30,7 +30,7 @@ Best of luck! Adventure awaits!
 
 # LinkerSprites
 
-Every sprite which is implemented is based on the `LinkerSprite` class contained in `sprites.linker.base.py`. The important methods are as follows:
+Every sprite which is implemented is based on the `LinkerSprite` class contained in `linker.sprites.base.py`. The important methods are as follows:
 
 * `shift_palette`: Changes whether the sprite is using the "pico-8" or "nes" palette
 * `set_palette`: Explicitly sets the palette to either "pico-8" or "nes"
@@ -39,14 +39,14 @@ Every sprite which is implemented is based on the `LinkerSprite` class contained
 * `colliderect`: Determines whether the sprite collides with a given rect
 * `draw`: Draws the sprite to the desired surface
 
-Every sprite in this library inherits these methods without changing them, so you can expect consistent behavior across all LinkerSprites. `get_rect` and `colliderect` are intentionally made to function as close to pygame's Sprites as possible.
+Every sprite in this library inherits these methods without changing them, so you can expect consistent behavior across all LinkerSprites. Each LinkerSprite is a [pygame.sprite.Sprite](https://www.pygame.org/docs/ref/sprite.html#pygame.sprite.Sprite) object, so they can be added to a pygame Group and managed that way.
 
 ## ScalableSprites
 
 There are two types of sprite which can be of varying size of at least 2x2: the Scroll and Bang classes. They are constructed like so:
 
 ```python
-from sprites import Scroll, Bang
+from linker import Scroll, Bang
 
 scroll = Scroll(width=3, height=2, palette="nes", pos=(100, 100))
 bang = Bang(width=2, height=5, palette="pico-8", pos=(10, 250))
@@ -59,7 +59,7 @@ They can be used as UI elements for text, dialogue, maps, inventory, you name it
 The Player sprite is the most complex sprite built by the spritesheet. But don't worry, I've done my best to make it as easy to read and understand as possible.
 
 ```python
-from sprites import Player
+from linker import Player
 
 player = Player(palette="nes")  # It's really that easy!
 player.change_state("walk")  # The default state is 'idle'
@@ -69,7 +69,7 @@ The Player has four states: `fade`, `idle`, `walk`, and `fall`.
 
 Player direction can be set with `player.turn_left()` and `player.turn_right()`.
 
-In order to animate the player, you must use `player.tick()`. It is programmed to play one animation frame every 5 ticks, which works well for an FPS of 60. If you use a lower or higher FPS, you can change `player.tick_rate` to whatever suits your purposes:
+In order to animate the player, you must use `player.update()`. It is programmed to play one animation frame every 5 ticks, which works well for an FPS of 60. If you use a lower or higher FPS, you can change `player.tick_rate` to whatever suits your purposes:
 
 ```python
 player.tick_rate = 6  # Slightly slower animation speed
@@ -80,7 +80,7 @@ player.tick_rate = 6  # Slightly slower animation speed
 These LinkerSprites are tiles meant for use in building the environment the player traverses. Remember that you can always specify `palette` and `pos` as keyword arguments.
 
 ```python
-from sprites import Filler, Hole, Tile, CrossTile, BrickTile, Accent, Stairs,\
+from linker import Filler, Hole, Tile, CrossTile, BrickTile, Accent, Stairs,
     Button, Chest, Pot, Statue, Plinth
 
 filler = Filler(tile_type=0)  # Tile type between 0 and 2
@@ -109,7 +109,7 @@ plinth = Plinth(plinth_type=0)  # 0 or 1
 The last of the environment sprites, which is a bit more complex, is the `Vine` class:
 
 ```python
-from sprites import Vine
+from linker import Vine
 
 vine = Vine(height=1, palette="pico-8", pos=(100, 100))
 
@@ -126,14 +126,14 @@ All of these sprites have `colliderect` but you'll have to implement the behavio
 Several Items have unique behavior, so in lieu of a simple list, I will demonstrate them all in code:
 
 ```python
-from sprites import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
+from linker import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
 
 pencil = Pencil(color="blue")  # Or red
 pencil.change_color()  # Changes blue to red and vice versa
 pencil.set_color("blue")  # Explicitly set color
 
 bomb = Bomb()
-bomb.tick()  # Ticks at a rate of 1 animation frame per 5 frames; set manually with bomb.tick_rate
+bomb.update()  # Ticks at a rate of 1 animation frame per 5 frames; set manually with bomb.tick_rate
 
 # No special sprite behavior
 key = Key()
@@ -159,13 +159,13 @@ ink.empty()  # Set the level to 0
 The final sprites are objects which don't really fit in anywhere else.
 
 ```python
-from sprites import Hand, Dust, Shadow
+from linker import Hand, Dust, Shadow
 
 hand = Hand()  # Can be used for tutorials or even for point-and-click style gameplay
 hand.set_state("grab")  # States are "point" and "grab"; default state is point
 
 dust = Dust()  # Simple particle effect
-dust.tick()  # Tick rate set at default of 7
+dust.update()  # Tick rate set at default of 7
 
-shadow = Shadow() # Undershadow for items on the overworld
+shadow = Shadow()  # Undershadow for items on the overworld
 ```

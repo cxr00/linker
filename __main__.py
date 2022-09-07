@@ -3,9 +3,9 @@ import random
 import itertools
 import time
 
-from sprites import *
+from linker import *
 from tilemap import Chunk, Map, chunk_size
-del linker, Spritesheet
+del sprites, Spritesheet
 
 # pygame
 pygame.init()
@@ -191,7 +191,7 @@ def sample_draw():
     # Dust
     dust.pos = (500 + camera.x, 300 + camera.y)
     dust.draw(screen)
-    dust.tick()
+    dust.update()
     if lotto():
         dust.shift_palette()
 
@@ -199,7 +199,7 @@ def sample_draw():
     for d in demons:
         if lotto():
             d.shift_palette()
-        d.tick()
+        d.update()
     demons[0].pos = (camera.x, 500 + camera.y)
     demons[0].draw(screen)
     demons[1].pos = (camera.x, 550 + camera.y)
@@ -208,7 +208,7 @@ def sample_draw():
     # Player
     player.pos = (500 + camera.x, 200 + camera.y)
     player.draw(screen)
-    player.tick()
+    player.update()
     if lotto():
         player.shift_palette()
     if lotto():
