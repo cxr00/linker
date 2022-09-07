@@ -32,12 +32,12 @@ Best of luck! Adventure awaits!
 
 Every sprite which is implemented is based on the `LinkerSprite` class contained in `sprites.linker.base.py`. The important methods are as follows:
 
-* `shift_palette`: Changes whether the sprite is using the "pico-8" or "nes" palette
-* `set_palette`: Explicitly sets the palette to either "pico-8" or "nes"
-* `get_size`: Gets the size of the pygame surface associated with the sprite
-* `get_rect`: Creates a Rect based on the Sprite's current position
-* `colliderect`: Determines whether the sprite collides with a given rect
-* `draw`: Draws the sprite to the desired surface
+* `shift_palette()`: Changes whether the sprite is using the "pico-8" or "nes" palette
+* `set_palette(palette)`: Explicitly sets the palette to either "pico-8" or "nes"
+* `get_size()`: Gets the size of the pygame surface associated with the sprite
+* `get_rect()`: Creates a Rect based on the Sprite's current position
+* `colliderect(other_rect)`: Determines whether the sprite collides with a given rect
+* `draw(surface)`: Draws the sprite to the desired surface
 
 Every sprite in this library inherits these methods without changing them, so you can expect consistent behavior across all LinkerSprites. `get_rect` and `colliderect` are intentionally made to function as close to pygame's Sprites as possible.
 
