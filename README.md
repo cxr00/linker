@@ -126,11 +126,11 @@ All of these sprites have `colliderect` but you'll have to implement the behavio
 Several Items have unique behavior, so in lieu of a simple list, I will demonstrate them all in code:
 
 ```python
-from linker import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
+from linker import Pen, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
 
-pencil = Pencil(color="blue")  # Or red
-pencil.change_color()  # Changes blue to red and vice versa
-pencil.set_color("blue")  # Explicitly set color
+pen = Pen(color="blue")  # Or red
+pen.change_color()  # Changes blue to red and vice versa
+pen.set_color("blue")  # Explicitly set color
 
 bomb = Bomb()
 bomb.update()  # Ticks at a rate of 1 animation frame per 5 frames; set manually with bomb.tick_rate

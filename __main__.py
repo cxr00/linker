@@ -67,7 +67,7 @@ scrolls = Scroll(5, 7, palette="nes"), Scroll(4, 3)
 vines = Vine(3), Vine(7, palette="nes")
 bangs = Bang(2, 3), Bang(5, 3, palette="nes")
 ink = Ink(level=2)
-pencils = Pencil(), Pencil("red", palette="nes")
+pencils = Pen(), Pen("red", palette="nes")
 statue = Statue("horns1")
 dust = Dust()
 plinth = Plinth(1)
@@ -165,7 +165,7 @@ def sample_draw():
     ink.pos = (400 + camera.x, 200 + camera.y)
     ink.draw(screen)
 
-    # Pencil
+    # Pen
     for p in pencils:
         if lotto():
             p.shift_palette()

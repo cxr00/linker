@@ -13,7 +13,7 @@ from .sprites import Hole, CrossTile, BrickTile
 from .sprites import Button, Chest, Pot
 from .sprites import Statue, Plinth, Vine
 
-from .sprites import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
+from .sprites import Pen, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
 
 from .sprites import Hand, Dust, Shadow
 

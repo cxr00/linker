@@ -10,7 +10,7 @@ from .environment import Hole, CrossTile, BrickTile
 from .environment import Button, Chest, Pot
 from .environment import Statue, Plinth, Vine
 
-from .item import Pencil, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
+from .item import Pen, Bomb, Key, Sack, Gem, Pearl, Relic, Ink
 
 from .misc import Hand, Dust, Shadow
 

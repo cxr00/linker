@@ -15,7 +15,7 @@ class Item(LinkerSprite):
         super().__init__(LINKER["item"][type(self).__name__.lower()], palette, pos)
 
 
-class Pencil(Item):
+class Pen(Item):
     """
     A pencil has a case and a fill color, either blue or red
     """
