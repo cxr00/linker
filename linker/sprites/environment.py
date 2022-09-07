@@ -110,10 +110,14 @@ class Button(LinkerSprite):
     """
     def __init__(self, palette="pico-8", pos=(0, 0)):
         super().__init__(LINKER["button"], palette, pos)
+        self.pressed = False
         self.set_surface()
 
     def set_surface(self):
         self.surface = self._current
+
+    def press(self, press=None):
+        self.pressed = not self.pressed if press is None else press
 
 
 class Chest(LinkerSprite):
