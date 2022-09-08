@@ -59,6 +59,9 @@ class LinkerSprite(pygame.sprite.Sprite):
     def colliderect(self, rect):
         return rect.colliderect(self.get_rect())
 
+    def collidepoint(self, pos):
+        return self.get_rect().collidepoint(pos)
+
     def draw(self, surface):
         surface.blit(self.surface, self.pos)
 
