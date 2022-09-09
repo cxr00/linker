@@ -112,7 +112,7 @@ LINKER = {
         }
     },
     "item": {
-        "pencil": {
+        "pen": {
             "pico-8": {
                 "case": comp[5][9],
                 "blue": comp[4][10],
