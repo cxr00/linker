@@ -62,8 +62,8 @@ class LinkerSprite(pygame.sprite.Sprite):
     def collidepoint(self, pos):
         return self.get_rect().collidepoint(pos)
 
-    def draw(self, surface):
-        surface.blit(self.surface, self.pos)
+    def draw(self, surface, pos=None):
+        surface.blit(self.surface, self.pos if pos is None else pos)
 
 
 class ScalableSprite(LinkerSprite):
