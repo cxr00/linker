@@ -1,6 +1,6 @@
 from cxr import SMR, SM
 from editor.components import Cursor, Player, Camera
-from editor.utils import TICK, draw_meta, draw_highlight_box, screen_size
+from editor.utils import TICK, draw_meta, screen_size
 from linker import Filler
 import pygame
 
@@ -45,16 +45,16 @@ def main():
                 player(event)
         screen.fill((0, 0, 0))
 
-        x, y = (cursor.pos[0]) // 48, (cursor.pos[1]) // 48
-        tile_x, tile_y = x, y
-        if cursor.create_tile:
-            tiles[(tile_x, tile_y)] = Filler(tile_type=(tile_x * 14 + tile_y * 14) % 3)
+        x = (cursor.pos[0] + camera.x - 336) // 48
+        y = (cursor.pos[1] + camera.y - 336) // 48
+        if cursor.create_tile and (x, y) not in tiles:
+            print(x, y)
+            tiles[(x, y)] = Filler(tile_type=(x * 14 + y * 14) % 3)
 
         for tile_key in tiles:
             screen.blit(tiles[tile_key].surface, (tile_key[0] * 48 + 336-camera.x, tile_key[1] * 48 + 336-camera.y))
 
         player.draw(screen)
-        draw_highlight_box(screen, x, y, (camera.x, camera.y))
         draw_meta(screen, clock, camera, cursor, player)
         if pygame.mouse.get_focused():
             cursor.draw(screen)

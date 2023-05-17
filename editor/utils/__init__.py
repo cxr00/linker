@@ -27,6 +27,7 @@ def draw_meta(surface, clock, camera, cursor, player):
 
 
 def draw_highlight_box(surface, x, y, camera_pos):
+    # I never quite managed to get this to work
     scaled_x = (x * 48 - camera_pos[0] % 48)
     scaled_y = (y * 48 - camera_pos[1] % 48)
     pygame.draw.line(surface, "white", (scaled_x, scaled_y), (scaled_x + 48, scaled_y))
