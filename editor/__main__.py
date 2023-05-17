@@ -1,6 +1,7 @@
 from cxr import SMR, SM
-from editor.components import Cursor, Player, Camera
-from editor.utils import TICK, draw_meta, screen_size
+from editor.components import Cursor, Player, Camera, Chunk
+from editor import TICK, WIDTH, HEIGHT
+from editor.utils import draw_meta
 from linker import Filler
 import pygame
 
@@ -25,9 +26,13 @@ def main():
 
     SMR.initialize("editor")
     cursor = SM.generate("editor", Cursor)
-    player = SM.generate("editor", Player, pos=(screen_size[0]//2, screen_size[1]//2))
+    player = SM.generate("editor", Player, pos=(WIDTH//2, HEIGHT//2))
     camera = SM.generate("editor", Camera)
     player.attach_camera(camera)
+
+    chunks = {
+        (x, y): Chunk((x, y)) for x in range(-4, 5) for y in range(-4, 5)
+    }
 
     run = True
     tiles = {}
@@ -47,15 +52,24 @@ def main():
 
         x = (cursor.pos[0] + camera.x - 336) // 48
         y = (cursor.pos[1] + camera.y - 336) // 48
-        if cursor.create_tile and (x, y) not in tiles:
-            print(x, y)
-            tiles[(x, y)] = Filler(tile_type=(x * 14 + y * 14) % 3)
+        if cursor.create_tile:
+            chunk_xy = (
+                x // 14,
+                y // 14
+            )
+            tile_x, tile_y = (
+                x % 14, y % 14
+            )
+            print(chunk_xy, tile_x, tile_y)
+            chunks[chunk_xy][tile_x][tile_y] = Filler(tile_type=(x * 14 + y * 14) % 3)
 
         for tile_key in tiles:
             screen.blit(tiles[tile_key].surface, (tile_key[0] * 48 + 336-camera.x, tile_key[1] * 48 + 336-camera.y))
 
+        for chunk in chunks.values():
+            chunk.draw(screen, camera)
         player.draw(screen)
-        draw_meta(screen, clock, camera, cursor, player)
+        draw_meta(screen, clock, camera, cursor, player, (x, y))
         if pygame.mouse.get_focused():
             cursor.draw(screen)
         clock.tick(FPS)

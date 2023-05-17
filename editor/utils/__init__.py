@@ -1,10 +1,5 @@
 import pygame
-pygame.init()
-
-TICK = pygame.event.custom_type()
-PLAYER_MOVE = pygame.event.custom_type()
-screen_size = 672, 672
-font = pygame.font.Font(None, 32)
+from editor import font
 
 def draw_fps(surface, clock):
     text = font.render(str(clock.get_fps()), True, (255, 255, 255))
@@ -24,8 +19,8 @@ def draw_meta(surface, clock, camera, cursor, player, xy):
     player_rect = camera_text.get_rect(topleft=(0, 96))
     surface.blit(player_text, player_rect)
 
-    cursor_text = font.render(str(cursor.pos), True, (255, 255, 255))
-    cursor_rect = camera_text.get_rect(topleft=(0, 144))
+    cursor_text = font.render(str(xy), True, (255, 255, 255))
+    cursor_rect = camera_text.get_rect(topleft=(cursor.pos[0]+48, cursor.pos[1]+16))
     surface.blit(cursor_text, cursor_rect)
 
     xy_text = font.render(str(xy), True, (255, 255, 255))

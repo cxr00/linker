@@ -1,7 +1,9 @@
 from cxr import SM
+
+from editor.utils import draw_fps
 from linker.sprites import character
 from editor.components import Camera
-from editor.utils import TICK, PLAYER_MOVE, screen_size
+from editor import TICK, WIDTH, HEIGHT
 import pygame
 
 controls = (
@@ -10,7 +12,7 @@ controls = (
     pygame.K_LEFT, pygame.K_a,
     pygame.K_RIGHT, pygame.K_d
 )
-move_speed = 30
+move_speed = 250
 
 
 class Player(SM):
@@ -91,7 +93,7 @@ class Player(SM):
             pass
 
     def draw(self, surface):
-        pos = screen_size[0]//2 + (self.character.pos[0]-self.camera.x), screen_size[1]//2 + (self.character.pos[1]-self.camera.y)
+        pos = WIDTH//2 + (self.character.pos[0]-self.camera.x), HEIGHT//2 + (self.character.pos[1]-self.camera.y)
         self.character.draw(surface, pos)
 
     def shift_palette(self):
@@ -102,11 +104,11 @@ class Player(SM):
 
 def test_player():
     from cxr import SMR
-    from editor.utils import screen_size
+    from editor import WIDTH, HEIGHT
 
     pygame.init()
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode(screen_size)
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     FPS = 60
 
     SMR.initialize("test")

@@ -1,7 +1,6 @@
 
 import pygame
 from cxr import SM
-from editor.utils import TICK
 from linker import Hand
 
 
