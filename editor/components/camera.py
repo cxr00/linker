@@ -17,8 +17,6 @@ class Camera(SM):
         @self.controller
         def controller(event):
             self["move_debt"] = self.x - (event.pos[0] + self.character_offset[0]), self.y - (event.pos[1] + self.character_offset[1])
-            if self.move_debt != (0, 0):
-                print("move_debt:", self.move_debt, end=" ")
             if self.move_debt[0] == 0:
                 self["x_speed"] = 0
             elif abs(self.move_debt[0]) < 20:

@@ -36,7 +36,6 @@ class Player(SM):
             if event.type == TICK:
                 self.camera(event)
                 self.character.update()
-            print("character:", self.character.pos, f"camera: {self.camera.x},{self.camera.y}")
 
         @self.add_state("idle")
         def idle(event):
@@ -103,7 +102,7 @@ class Player(SM):
 
 def test_player():
     from cxr import SMR
-    from editor.utils import screen_size, draw_fps
+    from editor.utils import screen_size
 
     pygame.init()
     clock = pygame.time.Clock()

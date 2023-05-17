@@ -23,6 +23,7 @@ class Cursor(SM):
 
         @self.controller
         def controller(event):
+            self["create_tile"] = False
             if event.type == pygame.MOUSEMOTION:
                 self.hand.pos = self["pos"] = event.pos
                 self["create_tile"] = pygame.mouse.get_pressed()[0]
