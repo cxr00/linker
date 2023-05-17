@@ -10,13 +10,9 @@ class Camera(SM):
 
     def _initialize(self):
         self["x"], self["y"] = WIDTH // 2, HEIGHT // 2
-        self["x_speed"] = self["y_speed"] = 0
-        self["move_debt"] = 0, 0
-        self["character_offset"] = 0, 0
 
         @self.controller
         def controller(event):
-
             self["x"], self["y"] = event.pos
 
 

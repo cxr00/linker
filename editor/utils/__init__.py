@@ -15,7 +15,7 @@ def draw_meta(surface, clock, camera, cursor, player, xy):
     fps_rect = fps_text.get_rect()
     surface.blit(fps_text, fps_rect)
 
-    camera_text = font.render(str((camera.x, camera.y, camera.move_debt)), True, (255, 255, 255))
+    camera_text = font.render(str((camera.x, camera.y)), True, (255, 255, 255))
     camera_rect = camera_text.get_rect(topleft=(0, 48))
     surface.blit(camera_text, camera_rect)
 
@@ -90,51 +90,51 @@ def get_string_from_asset(a):
 
 
 
-def get_asset_from_string(s, pos):
+def get_asset_from_string(s, pos, palette):
     if s == "x":
         return "x"
     s = s.split(",")
     t = s[0]
     if t == "filler":
-        return Filler(int(s[1]), pos=pos)
+        return Filler(int(s[1]), pos=pos, palette=palette)
     if t == "tile":
-        return Tile(s[1], pos=pos)
+        return Tile(s[1], pos=pos, palette=palette)
     if t == "crosstile":
-        return CrossTile(int(s[1]), pos=pos)
+        return CrossTile(int(s[1]), pos=pos, palette=palette)
     if t == "bricktile":
-        return BrickTile(s[1], s[2], pos=pos)
+        return BrickTile(s[1], s[2], pos=pos, palette=palette)
     if t == "accent":
-        return Accent(s[1], pos=pos)
+        return Accent(s[1], pos=pos, palette=palette)
     if t == "stairs":
-        return Stairs(int(s[1]), pos=pos)
+        return Stairs(int(s[1]), pos=pos, palette=palette)
     if t == "tile":
-        return Tile(s[1], pos=pos)
+        return Tile(s[1], pos=pos, palette=palette)
     if t == "button":
-        return Button(pos=pos)
+        return Button(pos=pos, palette=palette)
     if t == "chest":
-        return Chest(pos=pos)
+        return Chest(pos=pos, palette=palette)
     if t == "pot":
-        return Pot(pos=pos)
+        return Pot(pos=pos, palette=palette)
     if t == "statue":
-        return Statue(s[1], pos=pos)
+        return Statue(s[1], pos=pos, palette=palette)
     if t == "plinth":
-        return Plinth(s[1], pos=pos)
+        return Plinth(s[1], pos=pos, palette=palette)
     if t == "vine":
-        return Vine(int(s[1]), pos=pos)
+        return Vine(int(s[1]), pos=pos, palette=palette)
 
     if t == "pen":
-        return Pen(s[1], pos=pos)
+        return Pen(s[1], pos=pos, palette=palette)
     if t == "bomb":
-        return Bomb(pos=pos)
+        return Bomb(pos=pos, palette=palette)
     if t == "key":
-        return Key(pos=pos)
+        return Key(pos=pos, palette=palette)
     if t == "sack":
-        return Sack(pos=pos)
+        return Sack(pos=pos, palette=palette)
     if t == "gem":
-        return Gem(pos=pos)
+        return Gem(pos=pos, palette=palette)
     if t == "pearl":
-        return Pearl(pos=pos)
+        return Pearl(pos=pos, palette=palette)
     if t == "relic":
-        return Relic(pos=pos)
+        return Relic(pos=pos, palette=palette)
     if t == "ink":
-        return Ink(s[1], pos=pos)
+        return Ink(s[1], pos=pos, palette=palette)

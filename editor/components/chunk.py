@@ -39,6 +39,12 @@ class Chunk:
         pygame.draw.line(surface, "white", br, bl)
         pygame.draw.line(surface, "white", bl, tl)
 
+    def shift_palette(self):
+        for row in self:
+            for tile in row:
+                if tile != "x":
+                    tile.shift_palette()
+
 
     def serialise(self):
         return dict(
@@ -49,11 +55,11 @@ class Chunk:
         )
 
     @staticmethod
-    def deserialise(chunks):
+    def deserialise(chunks, palette):
         return [
             Chunk(
                 (chunk["x"], chunk["y"]),
-                [[get_asset_from_string(chunk["tiles"][x][y], (x,y)) for x in range(14)] for y in range(14)],
+                [[get_asset_from_string(chunk["tiles"][x][y], (x,y), palette) for x in range(14)] for y in range(14)],
                 [
                     {
                         "item": get_asset_from_string(collectible["name"], (collectible["x"], collectible["y"])),

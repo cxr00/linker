@@ -25,9 +25,9 @@ def main():
     chunks = {
         (x, y): Chunk((x, y)) for x in range(-4, 5) for y in range(-4, 5)
     }
+    palette = "pico-8"
 
     run = True
-    tiles = {}
     while run:
         clock.tick(FPS)
         pygame.event.post(pygame.event.Event(TICK, pos=player.character.pos, state=player.current_state()))
@@ -47,34 +47,31 @@ def main():
                 elif event.key == pygame.K_l:
                     try:
                         with open("chunks.json", "r") as f:
-                            chunks = Chunk.deserialise(json.load(f))
+                            chunks = Chunk.deserialise(json.load(f), palette)
                             chunks = {
                                 (chunk.xy[0], chunk.xy[1]): chunk for chunk in chunks
                             }
                     except json.decoder.JSONDecodeError:
                         pass
+                elif event.key == pygame.K_p:
+                    [chunk.shift_palette() for chunk in chunks.values()]
+                    palette = "nes" if palette == "pico-8" else "pico-8"
         screen.fill((0, 0, 0))
 
-        x = (cursor.pos[0] + camera.x - 336) // 48
-        y = (cursor.pos[1] + camera.y - 336) // 48
+        x = (cursor.pos[0] + camera.x_offset()) // 48
+        y = (cursor.pos[1] + camera.y_offset()) // 48
         if cursor.create_tile:
             chunk_xy = (
                 x // 14,
                 y // 14
             )
-            tile_x, tile_y = (
-                x % 14, y % 14
-            )
             if -4 <= chunk_xy[0] <= 4 and -4 <= chunk_xy[1] <= 4:
-                chunks[chunk_xy][tile_x][tile_y] = Filler(tile_type=(x * 14 + y * 14) % 3)
-
-        for tile_key in tiles:
-            screen.blit(tiles[tile_key].surface, (tile_key[0] * 48 + 336-camera.x, tile_key[1] * 48 + 336-camera.y))
+                chunks[chunk_xy][x % 14][y % 14] = Filler(tile_type=(x * 14 + y * 14) % 3, palette=palette)
 
         for chunk in chunks.values():
             chunk.draw(screen, camera)
         player.draw(screen)
-        draw_meta(screen, clock, camera, cursor, player, (x, y))
+        # draw_meta(screen, clock, camera, cursor, player, (x, y))
         if pygame.mouse.get_focused():
             cursor.draw(screen)
         clock.tick(FPS)
