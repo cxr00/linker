@@ -2,20 +2,24 @@ import pygame
 
 from linker import LinkerSprite
 from editor import font
+from editor.utils import get_string_from_asset, get_asset_from_string
 
 
 class Chunk:
-    def __init__(self, xy):
+    def __init__(self, xy, tiles=None, collectibles=None):
         self.xy = xy
         self.tiles = [
             ["x"] * 14 for _ in range(14)
-        ]
-        self.collectibles = {
+        ] if tiles is None else tiles
+        self.collectibles = [
 
-        }
+        ] if collectibles is None else collectibles
 
     def __getitem__(self, item):
         return self.tiles[item]
+
+    def __iter__(self):
+        return iter(self.tiles)
 
     def draw(self, surface, camera):
         tl = self.xy[0] * 672 - camera.x_offset(), self.xy[1] * 672 - camera.y_offset()
@@ -34,3 +38,28 @@ class Chunk:
         pygame.draw.line(surface, "white", tr, br)
         pygame.draw.line(surface, "white", br, bl)
         pygame.draw.line(surface, "white", bl, tl)
+
+
+    def serialise(self):
+        return dict(
+            x=self.xy[0],
+            y=self.xy[1],
+            tiles=[[get_string_from_asset(self[x][y]) for x in range(14)] for y in range(14)],
+            collectibles=self.collectibles
+        )
+
+    @staticmethod
+    def deserialise(chunks):
+        return [
+            Chunk(
+                (chunk["x"], chunk["y"]),
+                [[get_asset_from_string(chunk["tiles"][x][y], (x,y)) for x in range(14)] for y in range(14)],
+                [
+                    {
+                        "item": get_asset_from_string(collectible["name"], (collectible["x"], collectible["y"])),
+                        "x": collectible["x"],
+                        "y": collectible["y"]
+                    } for collectible in chunk["collectibles"]
+                ]
+            ) for chunk in chunks
+        ]

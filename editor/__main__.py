@@ -1,19 +1,11 @@
+import json
+
 from cxr import SMR, SM
 from editor.components import Cursor, Player, Camera, Chunk
 from editor import TICK, WIDTH, HEIGHT
 from editor.utils import draw_meta
 from linker import Filler
 import pygame
-
-
-def get_string_from_asset():
-    # TODO: assign string values to each asset
-    pass
-
-
-def get_asset_from_string():
-    # TODO: assign classes to each string
-    pass
 
 
 def main():
@@ -48,6 +40,19 @@ def main():
             elif event.type == TICK:
                 player(event)
                 camera(event)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_e:
+                    with open("chunks.json", "w+") as f:
+                        json.dump([chunk.serialise() for chunk in chunks.values()], f)
+                elif event.key == pygame.K_l:
+                    try:
+                        with open("chunks.json", "r") as f:
+                            chunks = Chunk.deserialise(json.load(f))
+                            chunks = {
+                                (chunk.xy[0], chunk.xy[1]): chunk for chunk in chunks
+                            }
+                    except json.decoder.JSONDecodeError:
+                        pass
         screen.fill((0, 0, 0))
 
         x = (cursor.pos[0] + camera.x - 336) // 48
