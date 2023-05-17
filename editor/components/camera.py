@@ -32,3 +32,6 @@ class Camera(SM):
             self["x"] += self.x_speed
             self["y"] += self.y_speed
 
+
+    def negative(self):
+        return -self.x, -self.y
