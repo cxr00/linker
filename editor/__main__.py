@@ -46,8 +46,8 @@ def main():
             elif event.type == pygame.QUIT:
                 run = False
             elif event.type == TICK:
-                # camera(event)
                 player(event)
+                camera(event)
         screen.fill((0, 0, 0))
 
         x = (cursor.pos[0] + camera.x - 336) // 48
@@ -60,8 +60,8 @@ def main():
             tile_x, tile_y = (
                 x % 14, y % 14
             )
-            print(chunk_xy, tile_x, tile_y)
-            chunks[chunk_xy][tile_x][tile_y] = Filler(tile_type=(x * 14 + y * 14) % 3)
+            if -4 <= chunk_xy[0] <= 4 and -4 <= chunk_xy[1] <= 4:
+                chunks[chunk_xy][tile_x][tile_y] = Filler(tile_type=(x * 14 + y * 14) % 3)
 
         for tile_key in tiles:
             screen.blit(tiles[tile_key].surface, (tile_key[0] * 48 + 336-camera.x, tile_key[1] * 48 + 336-camera.y))
