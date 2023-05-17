@@ -217,7 +217,7 @@ def sample_draw():
         player.turn_right()
 
     # Pot
-    pot.pos = (100, 10)
+    pot.pos = (100 + camera.x, 10 + camera.y)
     pot.draw(screen)
     if lotto():
         if pot.state == "empty":
