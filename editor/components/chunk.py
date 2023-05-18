@@ -31,6 +31,10 @@ class Chunk:
                 if isinstance(element, LinkerSprite):
                     surface.blit(element.surface, (self.xy[0]*672 + x*48 - camera.x_offset(), self.xy[1]*672 + y*48 - camera.y_offset()))
 
+        for collectible in self.collectibles:
+            print(collectible["item"])
+            surface.blit(collectible["item"], (self.xy[0]*672 + collectible["x"]*48 - camera.x_offset(), self.xy[1]*672 + collectible["y"]*48 - camera.y_offset()))
+
         coord = font.render(f"{self.xy}", True, (255, 255, 255))
         coord_rect = coord.get_rect(topleft=(tl[0] + 5, tl[1] + 5))
         surface.blit(coord, coord_rect)
