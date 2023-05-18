@@ -21,7 +21,7 @@ class Chunk:
     def __iter__(self):
         return iter(self.tiles)
 
-    def draw(self, surface, camera):
+    def draw(self, surface, camera, draw_items=True, draw_dividers=True):
         tl = self.xy[0] * 672 - camera.x_offset(), self.xy[1] * 672 - camera.y_offset()
         tr = tl[0] + 672, tl[1]
         br = tr[0], tr[1] + 672
@@ -31,24 +31,25 @@ class Chunk:
                 if isinstance(element, LinkerSprite):
                     surface.blit(element.surface, (self.xy[0]*672 + x*48 - camera.x_offset(), self.xy[1]*672 + y*48 - camera.y_offset()))
 
-        for collectible in self.collectibles:
-            print(collectible["item"])
-            surface.blit(collectible["item"], (self.xy[0]*672 + collectible["x"]*48 - camera.x_offset(), self.xy[1]*672 + collectible["y"]*48 - camera.y_offset()))
+        if draw_items:
+            for collectible in self.collectibles:
+                print(collectible["item"])
+                surface.blit(collectible["item"], (self.xy[0]*672 + collectible["x"]*48 - camera.x_offset(), self.xy[1]*672 + collectible["y"]*48 - camera.y_offset()))
 
-        coord = font.render(f"{self.xy}", True, (255, 255, 255))
-        coord_rect = coord.get_rect(topleft=(tl[0] + 5, tl[1] + 5))
-        surface.blit(coord, coord_rect)
-        pygame.draw.line(surface, "white", tl, tr)
-        pygame.draw.line(surface, "white", tr, br)
-        pygame.draw.line(surface, "white", br, bl)
-        pygame.draw.line(surface, "white", bl, tl)
+        if draw_dividers:
+            coord = font.render(f"{self.xy}", True, (255, 255, 255))
+            coord_rect = coord.get_rect(topleft=(tl[0] + 5, tl[1] + 5))
+            surface.blit(coord, coord_rect)
+            pygame.draw.line(surface, "white", tl, tr)
+            pygame.draw.line(surface, "white", tr, br)
+            pygame.draw.line(surface, "white", br, bl)
+            pygame.draw.line(surface, "white", bl, tl)
 
     def shift_palette(self):
         for row in self:
             for tile in row:
                 if tile != "x":
                     tile.shift_palette()
-
 
     def serialise(self):
         return dict(
