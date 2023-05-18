@@ -24,7 +24,7 @@ def main():
     camera = SM.generate("editor", Camera)
     selection_panel = SM.generate("editor", SelectionPanel, screen=screen, palette=palette)
     player.attach_camera(camera)
-    selection_panel.associate_player(player)
+    selection_panel.attach_player(player)
     cursor.attach_cmap(selection_panel)
 
     chunks = {
@@ -39,6 +39,8 @@ def main():
         for event in pygame.event.get():
             if event.type in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP, pygame.MOUSEMOTION):
                 cursor(event)
+                selection_panel(event)
+            elif event.type == pygame.MOUSEWHEEL:
                 selection_panel(event)
             elif event.type == pygame.QUIT:
                 run = False
@@ -84,13 +86,12 @@ def main():
                 elif selection_panel.current_selection == Filler:
                     chunks[chunk_xy][x % 14][y % 14] = Filler(tile_type=(x * 14 + y * 14) % 3, palette=palette)
                 else:
-                    chunks[chunk_xy][x % 14][y % 14] = selection_panel.current_selection(**selection_panel.current_selection_args, palette=palette)
+                    chunks[chunk_xy][x % 14][y % 14] = selection_panel.current_selection(**selection_panel.get_args(), palette=palette)
 
         for chunk in chunks.values():
             chunk.draw(screen, camera)
         player.draw(screen)
         selection_panel.draw(screen)
-        # draw_meta(screen, clock, camera, cursor, player, (x, y))
         if pygame.mouse.get_focused():
             cursor.draw(screen)
         clock.tick(FPS)

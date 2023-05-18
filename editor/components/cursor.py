@@ -28,13 +28,13 @@ class Cursor(SM):
             if event.type == pygame.MOUSEMOTION:
                 self.hand.pos = self["pos"] = event.pos
                 if not self.cmap.cmap_panel.collidepoint(event.pos):
-                    if not self.cmap.in_map or not self.cmap.full_panel.collidepoint(event.pos):
+                    if not self.cmap.current_state() == "map_open" or not self.cmap.full_panel.collidepoint(event.pos):
                         self["create_tile"] = pygame.mouse.get_pressed()[0]
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.hand.set_state("grab")
                     if not self.cmap.cmap_panel.collidepoint(event.pos):
-                        if not self.cmap.in_map:
+                        if not self.cmap.current_state() == "map_open":
                             self["create_tile"] = True
                         elif not self.cmap.full_panel.collidepoint(event.pos):
                             self["create_tile"] = True
