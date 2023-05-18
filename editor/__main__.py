@@ -82,6 +82,14 @@ def main():
                     selection_panel.shift_palette()
                 elif event.key == pygame.K_ESCAPE:
                     selection_panel(event)
+                elif event.key == pygame.K_t:
+                    x = (cursor.pos[0] + camera.x_offset()) // 48
+                    y = (cursor.pos[1] + camera.y_offset()) // 48
+                    chunk_xy = (
+                        x // 14,
+                        y // 14
+                    )
+                    chunks[chunk_xy][x % 14][y % 14] = "x"
 
         screen.fill((0, 0, 0))
 
