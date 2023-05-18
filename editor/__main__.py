@@ -7,6 +7,8 @@ from editor.utils import draw_meta, get_string_from_asset
 from linker import Filler
 from linker.sprites.item import Item
 import pygame
+from tkinter import filedialog, messagebox
+import tkinter as tk
 
 
 def main():
@@ -49,15 +51,29 @@ def main():
                 camera(event)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_e:
-                    with open("chunks.json", "w+") as f:
-                        json.dump([chunk.serialise() for chunk in chunks.values()], f)
+                    root = tk.Tk()
+                    root.withdraw()
+                    filename = filedialog.asksaveasfilename()
+                    try:
+                        with open(filename, "w+") as f:
+                            json.dump([chunk.serialise() for chunk in chunks.values()], f)
+                    except Exception as exc:
+                        messagebox.showerror("ERROR", str(exc) + ". The file was probably invalid.")
+                    root.destroy()
                 elif event.key == pygame.K_l:
                     try:
-                        with open("chunks.json", "r") as f:
-                            chunks = Chunk.deserialise(json.load(f), palette)
-                            chunks = {
-                                (chunk.xy[0], chunk.xy[1]): chunk for chunk in chunks
-                            }
+                        root = tk.Tk()
+                        root.withdraw()
+                        filename = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
+                        try:
+                            with open(f"{filename}", "r") as f:
+                                chunks = Chunk.deserialise(json.load(f), palette)
+                                chunks = {
+                                    (chunk.xy[0], chunk.xy[1]): chunk for chunk in chunks
+                                }
+                        except Exception as exc:
+                            messagebox.showerror("ERROR", str(exc) + ". The file was probably invalid.")
+                        root.destroy()
                     except json.decoder.JSONDecodeError:
                         pass
                 elif event.key == pygame.K_p:
