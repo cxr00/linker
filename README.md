@@ -18,6 +18,8 @@ This README should have everything you need to work with this library, so I high
 
 You can see a sample of how this library works by running the `__main__` file in the top directory.
 
+**NEW**: There is now a map editor! Check out the editor readme [here](https://github.com/cxr00/linker/blob/master/editor/readme.md) to learn how to use it to build your level maps!
+
 ## Important note for new coders
 
 Because you didn't write this library yourself, you're not going to be an expert on its ins and outs right away. And that's okay! I just want to warn you that there's a big chance that you'll encounter errors due simply to misspelling words somewhere in your code.
